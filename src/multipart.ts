@@ -1,6 +1,5 @@
-import utils = require('./utils');
-import _Error = require('./Error');
-const {StripeError} = _Error;
+import {StripeError} from './Error.js';
+import utils from './utils.js';
 
 class StreamProcessingError extends StripeError {}
 
@@ -76,7 +75,12 @@ const streamProcessor = (method, data, headers, callback) => {
     });
 };
 
-const multipartRequestDataProcessor = (method, data, headers, callback) => {
+export const multipartRequestDataProcessor = (
+  method,
+  data,
+  headers,
+  callback
+) => {
   data = data || {};
 
   if (method !== 'POST') {
@@ -90,8 +94,4 @@ const multipartRequestDataProcessor = (method, data, headers, callback) => {
 
   const buffer = multipartDataGenerator(method, data, headers);
   return callback(null, buffer);
-};
-
-export = {
-  multipartRequestDataProcessor: multipartRequestDataProcessor,
 };

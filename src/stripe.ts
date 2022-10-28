@@ -1,6 +1,11 @@
-import _Error = require('./Error');
-
-const resources = require('./resources');
+import * as CryptoProvider from './crypto/CryptoProvider.js';
+import * as StripeError from './Error.js';
+import * as Webhooks from './Webhooks.js';
+import {HttpClient, HttpClientResponse} from './net/HttpClient.js';
+import {EventEmitter} from 'events';
+import StripeResource from './StripeResource.js';
+import resources from './resources.js';
+import utils from './utils.js';
 
 const DEFAULT_HOST = 'api.stripe.com';
 const DEFAULT_PORT = '443';
@@ -9,9 +14,8 @@ const DEFAULT_API_VERSION = null;
 
 const DEFAULT_TIMEOUT = 80000;
 
-Stripe.PACKAGE_VERSION = require('../package.json').version;
+Stripe.PACKAGE_VERSION = '10.15.0';
 
-const utils = require('./utils');
 const {determineProcessUserAgentProperties, emitWarning} = utils;
 
 Stripe.USER_AGENT = {
@@ -45,20 +49,13 @@ const ALLOWED_CONFIG_PROPERTIES = [
   'stripeAccount',
 ];
 
-const EventEmitter = require('events').EventEmitter;
-
-import StripeResource = require('./StripeResource');
 Stripe.StripeResource = StripeResource;
 Stripe.resources = resources;
-
-const {HttpClient, HttpClientResponse} = require('./net/HttpClient');
 Stripe.HttpClient = HttpClient;
 Stripe.HttpClientResponse = HttpClientResponse;
-
-const CryptoProvider = require('./crypto/CryptoProvider');
 Stripe.CryptoProvider = CryptoProvider;
 
-function Stripe(key, config = {}) {
+export function Stripe(key, config = {}) {
   if (!(this instanceof Stripe)) {
     return new (Stripe as any)(key, config);
   }
@@ -125,8 +122,8 @@ function Stripe(key, config = {}) {
   this._prepResources();
   this._setApiKey(key);
 
-  this.errors = _Error;
-  this.webhooks = require('./Webhooks');
+  this.errors = StripeError;
+  this.webhooks = Webhooks;
 
   this._prevRequestMetrics = [];
   this._enableTelemetry = props.telemetry !== false;
@@ -135,8 +132,8 @@ function Stripe(key, config = {}) {
   this.StripeResource = Stripe.StripeResource;
 }
 
-Stripe.errors = _Error;
-Stripe.webhooks = require('./Webhooks');
+Stripe.errors = StripeError;
+Stripe.webhooks = Webhooks;
 
 Stripe.createNodeHttpClient = (agent) => {
   const {NodeHttpClient} = require('./net/NodeHttpClient');
@@ -604,11 +601,4 @@ Stripe.prototype = {
   },
 };
 
-module.exports = Stripe;
-
-// expose constructor as a named property to enable mocking with Sinon.JS
-module.exports.Stripe = Stripe;
-
-// Allow use with the TypeScript compiler without `esModuleInterop`.
-// We may also want to add `Object.defineProperty(exports, "__esModule", {value: true});` in the future, so that Babel users will use the `default` version.
-module.exports.default = Stripe;
+export default Stripe;

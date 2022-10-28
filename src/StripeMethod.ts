@@ -1,7 +1,6 @@
-const utils = require('./utils');
-import makeRequest = require('./makeRequest');
-import autoPagination = require('./autoPagination');
-const makeAutoPaginationMethods = autoPagination.makeAutoPaginationMethods;
+import {makeAutoPaginationMethods} from './autoPagination.js';
+import {makeRequest} from './makeRequest.js';
+import utils from './utils.js';
 
 /**
  * Create an API method from the declared spec.
@@ -19,7 +18,7 @@ const makeAutoPaginationMethods = autoPagination.makeAutoPaginationMethods;
  *  Usefully for applying transforms to data on a per-method basis.
  * @param [spec.host] Hostname for the request.
  */
-function stripeMethod(spec) {
+export function stripeMethod(spec) {
   if (spec.path !== undefined && spec.fullPath !== undefined) {
     throw new Error(
       `Method spec specified both a 'path' (${spec.path}) and a 'fullPath' (${spec.fullPath}).`
@@ -52,5 +51,3 @@ function stripeMethod(spec) {
     return requestPromise;
   };
 }
-
-export = stripeMethod;

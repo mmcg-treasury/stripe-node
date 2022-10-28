@@ -1,4 +1,4 @@
-import Error from '../lib/Error.js';
+import * as Error from '../lib/Error.js';
 import {expect} from 'chai';
 
 describe('Error', () => {

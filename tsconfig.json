@@ -3,7 +3,7 @@
     "outDir": "./lib",
     "allowJs": true,
     "target": "es2017",
-    "module": "commonjs",
+    "module": "node16",
     "checkJs": false,
     "alwaysStrict": true,
   },

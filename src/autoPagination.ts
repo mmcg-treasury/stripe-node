@@ -1,7 +1,12 @@
-import makeRequest = require('./makeRequest');
-const utils = require('./utils');
+import {makeRequest} from './makeRequest.js';
+import utils from './utils.js';
 
-function makeAutoPaginationMethods(self, requestArgs, spec, firstPagePromise) {
+export function makeAutoPaginationMethods(
+  self,
+  requestArgs,
+  spec,
+  firstPagePromise
+) {
   const promiseCache = {currentPromise: null};
   const reverseIteration = isReverseIteration(requestArgs);
   let pagePromise = firstPagePromise;
@@ -91,10 +96,6 @@ function makeAutoPaginationMethods(self, requestArgs, spec, firstPagePromise) {
   };
   return autoPaginationMethods;
 }
-
-export = {
-  makeAutoPaginationMethods: makeAutoPaginationMethods,
-};
 
 /**
  * ----------------

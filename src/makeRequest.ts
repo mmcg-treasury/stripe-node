@@ -1,4 +1,4 @@
-const utils = require('./utils');
+import utils from './utils.js';
 
 function getRequestOpts(self, requestArgs, spec, overrideData) {
   // Extract spec values with defaults.
@@ -74,7 +74,7 @@ function getRequestOpts(self, requestArgs, spec, overrideData) {
   };
 }
 
-function makeRequest(self, requestArgs, spec, overrideData) {
+export function makeRequest(self, requestArgs, spec, overrideData) {
   return new Promise((resolve, reject) => {
     let opts;
     try {
@@ -116,5 +116,3 @@ function makeRequest(self, requestArgs, spec, overrideData) {
     );
   });
 }
-
-export = makeRequest;

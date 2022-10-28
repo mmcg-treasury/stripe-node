@@ -1,6 +1,6 @@
-import resourceNamespace from './ResourceNamespace.js';
 // File generated from our OpenAPI spec
-('use strict');
+import resourceNamespace from './ResourceNamespace.js';
+
 export const Accounts = require('./resources/Accounts');
 export const Account = require('./resources/Accounts');
 export const AccountLinks = require('./resources/AccountLinks');

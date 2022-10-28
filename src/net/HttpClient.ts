@@ -9,7 +9,7 @@ type TimeoutError = TypeError & {code?: string};
  * 2. A client class which extends HttpClient and implements all methods,
  *    returning their own response class when making requests.
  */
-class HttpClient {
+export class HttpClient {
   static CONNECTION_CLOSED_ERROR_CODES: string[];
   static TIMEOUT_ERROR_CODE: string;
 
@@ -44,7 +44,7 @@ class HttpClient {
 HttpClient.CONNECTION_CLOSED_ERROR_CODES = ['ECONNRESET', 'EPIPE'];
 HttpClient.TIMEOUT_ERROR_CODE = 'ETIMEDOUT';
 
-class HttpClientResponse {
+export class HttpClientResponse {
   _statusCode: number;
   _headers: Record<string, string>;
 
@@ -73,5 +73,3 @@ class HttpClientResponse {
     throw new Error('toJSON not implemented.');
   }
 }
-
-export = {HttpClient, HttpClientResponse};

@@ -1,11 +1,10 @@
-import crypto = require('crypto');
-
-import CryptoProvider = require('./CryptoProvider');
+import CryptoProvider from './CryptoProvider.js';
+import crypto from 'crypto';
 
 /**
  * `CryptoProvider which uses the Node `crypto` package for its computations.
  */
-class NodeCryptoProvider extends CryptoProvider {
+export default class NodeCryptoProvider extends CryptoProvider {
   /** @override */
   computeHMACSignature(payload: string, secret: string): string {
     return crypto
@@ -23,5 +22,3 @@ class NodeCryptoProvider extends CryptoProvider {
     return signature;
   }
 }
-
-export = NodeCryptoProvider;

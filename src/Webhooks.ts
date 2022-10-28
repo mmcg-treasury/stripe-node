@@ -1,8 +1,7 @@
-import utils = require('./utils');
-import _Error = require('./Error');
-const {StripeError, StripeSignatureVerificationError} = _Error;
+import {StripeError, StripeSignatureVerificationError} from './Error.js';
+import utils from './utils.js';
 
-const Webhook = {
+export const Webhook = {
   DEFAULT_TOLERANCE: 300, // 5 minutes
   signature: null,
 
@@ -277,5 +276,3 @@ function getNodeCryptoProvider() {
 }
 
 Webhook.signature = signature;
-
-export = Webhook;

@@ -1,16 +1,15 @@
-import * as utils from './utils';
-
-import _Error = require('./Error');
-const {
+import * as StripeMethod from './StripeMethod.js';
+import * as StripeMethodBasic from './StripeMethod.basic.js';
+import {
   StripeAPIError,
   StripeAuthenticationError,
   StripeConnectionError,
   StripeError,
   StripePermissionError,
   StripeRateLimitError,
-} = _Error;
-
-const {HttpClient} = require('./net/HttpClient');
+} from './Error.js';
+import {HttpClient} from './net/HttpClient.js';
+import utils from './utils.js';
 
 type Settings = {
   timeout?: number;
@@ -26,8 +25,8 @@ type Options = {
 StripeResource.extend = utils.protoExtend;
 
 // Expose method-creator & prepared (basic) methods
-StripeResource.method = require('./StripeMethod');
-StripeResource.BASIC_METHODS = require('./StripeMethod.basic');
+StripeResource.method = StripeMethod;
+StripeResource.BASIC_METHODS = StripeMethodBasic;
 
 StripeResource.MAX_BUFFERED_REQUEST_METRICS = 100;
 const MAX_RETRY_AFTER_WAIT = 60;
@@ -35,7 +34,7 @@ const MAX_RETRY_AFTER_WAIT = 60;
 /**
  * Encapsulates request logic for a Stripe Resource
  */
-function StripeResource(stripe, deprecatedUrlData) {
+export function StripeResource(stripe, deprecatedUrlData) {
   this._stripe = stripe;
   if (deprecatedUrlData) {
     throw new Error(
@@ -627,4 +626,4 @@ StripeResource.prototype = {
   },
 };
 
-export = StripeResource;
+export default StripeResource;
