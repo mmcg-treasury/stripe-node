@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('WebhookEndpoints Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('WebhookEndpoints Resource', () => {
       });
     });
   });
-
   describe('del', () => {
     it('Sends the correct request', () => {
       stripe.webhookEndpoints.del('we_123');
@@ -29,7 +28,6 @@ describe('WebhookEndpoints Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.webhookEndpoints.update('we_123', {
@@ -46,14 +44,12 @@ describe('WebhookEndpoints Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.webhookEndpoints.create({
         enabled_events: ['charge.succeeded'],
         url: 'https://stripe.com',
       });
-
       expect(stripe.LAST_REQUEST).to.deep.equal({
         method: 'POST',
         url: '/v1/webhook_endpoints',
@@ -66,7 +62,6 @@ describe('WebhookEndpoints Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.webhookEndpoints.list();

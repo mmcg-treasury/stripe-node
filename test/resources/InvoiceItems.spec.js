@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('InvoiceItems Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('InvoiceItems Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.invoiceItems.create({
@@ -31,7 +30,6 @@ describe('InvoiceItems Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.invoiceItems.update('invoiceItemId1', {
@@ -46,7 +44,6 @@ describe('InvoiceItems Resource', () => {
       });
     });
   });
-
   describe('del', () => {
     it('Sends the correct request', () => {
       stripe.invoiceItems.del('invoiceItemId2');
@@ -59,7 +56,6 @@ describe('InvoiceItems Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.invoiceItems.list();

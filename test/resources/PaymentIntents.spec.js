@@ -1,10 +1,9 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 const PAYMENT_INTENT_TEST_ID = 'pi_123';
-
 describe('Payment Intents Resource', () => {
   describe('create', () => {
     it('Sends the correct request', () => {
@@ -23,7 +22,6 @@ describe('Payment Intents Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.paymentIntents.list();
@@ -36,7 +34,6 @@ describe('Payment Intents Resource', () => {
       });
     });
   });
-
   describe('retrieve', () => {
     it('Sends the correct request', () => {
       stripe.paymentIntents.retrieve(PAYMENT_INTENT_TEST_ID);
@@ -49,7 +46,6 @@ describe('Payment Intents Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.paymentIntents.update(PAYMENT_INTENT_TEST_ID, {
@@ -64,7 +60,6 @@ describe('Payment Intents Resource', () => {
       });
     });
   });
-
   describe('cancel', () => {
     it('Sends the correct request', () => {
       stripe.paymentIntents.cancel(PAYMENT_INTENT_TEST_ID);
@@ -77,7 +72,6 @@ describe('Payment Intents Resource', () => {
       });
     });
   });
-
   describe('capture', () => {
     it('Sends the correct request', () => {
       stripe.paymentIntents.capture(PAYMENT_INTENT_TEST_ID);
@@ -90,7 +84,6 @@ describe('Payment Intents Resource', () => {
       });
     });
   });
-
   describe('confirm', () => {
     it('Sends the correct request', () => {
       stripe.paymentIntents.confirm(PAYMENT_INTENT_TEST_ID);

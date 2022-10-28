@@ -1,19 +1,15 @@
-'use strict';
+import 'mocha';
+import {use} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import http from 'http';
+import CryptoProvider from '../lib/crypto/CryptoProvider.js';
+import {ResourceNamespace} from '../lib/ResourceNamespace.js';
+import stripe from '../lib/stripe.js';
 
-// NOTE: testUtils should be require'd before anything else in each spec file!
-
-require('mocha');
 // Ensure we are using the 'as promised' libs before any tests are run:
-require('chai').use(require('chai-as-promised'));
-
-const http = require('http');
-
-const CryptoProvider = require('../lib/crypto/CryptoProvider');
-const ResourceNamespace = require('../lib/ResourceNamespace').ResourceNamespace;
-
+({use}.use(chaiAsPromised));
 const testingHttpAgent = new http.Agent({keepAlive: false});
-
-const utils = (module.exports = {
+const utils = {
   getTestServerStripe: (clientOptions, handler, callback) => {
     const server = http.createServer((req, res) => {
       const {shouldStayOpen} = handler(req, res) || {};
@@ -25,64 +21,48 @@ const utils = (module.exports = {
     });
     server.listen(0, () => {
       const {port} = server.address();
-      const stripe = require('../lib/stripe')(
-        module.exports.getUserStripeKey(),
-        {
-          host: 'localhost',
-          port,
-          protocol: 'http',
-          httpAgent: testingHttpAgent,
-          ...clientOptions,
-        }
-      );
+      const stripe = stripe(utils.getUserStripeKey(), {
+        host: 'localhost',
+        port,
+        protocol: 'http',
+        httpAgent: testingHttpAgent,
+        ...clientOptions,
+      });
       return callback(null, stripe, () => {
         server.close();
       });
     });
   },
-
   getStripeMockClient: () => {
-    const stripe = require('../lib/stripe');
-
     return stripe('sk_test_123', {
       host: process.env.STRIPE_MOCK_HOST || 'localhost',
       port: process.env.STRIPE_MOCK_PORT || 12111,
       protocol: 'http',
     });
   },
-
   getUserStripeKey: () => {
     const key =
       process.env.STRIPE_TEST_API_KEY || 'tGN0bIwXnHdwOa85VABjPdSn8nWY7G7I';
-
     return key;
   },
-
   getSpyableStripe: () => {
     // Provide a testable stripe instance
     // That is, with mock-requests built in and hookable
-
-    const stripe = require('../lib/stripe');
     const stripeInstance = stripe('fakeAuthToken');
-
     stripeInstance.REQUESTS = [];
-
     for (const i in stripeInstance) {
       makeInstanceSpyable(stripeInstance, stripeInstance[i]);
     }
-
     function makeInstanceSpyable(stripeInstance, thisInstance) {
       if (thisInstance instanceof stripe.StripeResource) {
         patchRequest(stripeInstance, thisInstance);
       } else if (thisInstance instanceof ResourceNamespace) {
         const namespace = thisInstance;
-
         for (const j in namespace) {
           makeInstanceSpyable(stripeInstance, namespace[j]);
         }
       }
     }
-
     function patchRequest(stripeInstance, instance) {
       instance._request = function(method, host, url, data, auth, options, cb) {
         const req = (stripeInstance.LAST_REQUEST = {
@@ -98,12 +78,10 @@ const utils = (module.exports = {
         if (host) {
           req.host = host;
         }
-
         const handleMockRequest = (err, req) => {
           stripeInstance.REQUESTS.push(req);
           cb.call(this, err, {});
         };
-
         if (this.requestDataProcessor) {
           this.requestDataProcessor(
             method,
@@ -116,10 +94,8 @@ const utils = (module.exports = {
         }
       };
     }
-
     return stripeInstance;
   },
-
   /**
    * A utility where cleanup functions can be registered to be called post-spec.
    * CleanupUtility will automatically register on the mocha afterEach hook,
@@ -127,7 +103,6 @@ const utils = (module.exports = {
    */
   CleanupUtility: (() => {
     CleanupUtility.DEFAULT_TIMEOUT = 20000;
-
     function CleanupUtility(timeout) {
       const self = this;
       this._cleanupFns = [];
@@ -140,7 +115,6 @@ const utils = (module.exports = {
         return self.doCleanup(done);
       });
     }
-
     CleanupUtility.prototype = {
       doCleanup(done) {
         const cleanups = this._cleanupFns;
@@ -196,10 +170,8 @@ const utils = (module.exports = {
         });
       },
     };
-
     return CleanupUtility;
   })(),
-
   /**
    * Get a random string for test Object creation
    */
@@ -208,18 +180,16 @@ const utils = (module.exports = {
       .toString(36)
       .slice(2);
   },
-
   envSupportsForAwait: () => {
     return typeof Symbol !== 'undefined' && Symbol.asyncIterator;
   },
-
   FakeCryptoProvider: class extends CryptoProvider {
     computeHMACSignature(payload, secret) {
       return 'fake signature';
     }
-
     computeHMACSignatureAsync(payload, secret) {
       return Promise.resolve('fake signature');
     }
   },
-});
+};
+export default utils;

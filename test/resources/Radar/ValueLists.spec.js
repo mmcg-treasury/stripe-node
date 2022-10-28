@@ -1,15 +1,13 @@
-'use strict';
-
-const stripe = require('../../../testUtils').getSpyableStripe();
-
-const expect = require('chai').expect;
-
+import testUtils from '../../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Radar', () => {
   describe('ValueLists Resource', () => {
     describe('retrieve', () => {
       it('Sends the correct request', () => {
         stripe.radar.valueLists.retrieve('rsl_123');
-
         expect(stripe.LAST_REQUEST).to.deep.equal({
           method: 'GET',
           url: '/v1/radar/value_lists/rsl_123',
@@ -19,7 +17,6 @@ describe('Radar', () => {
         });
       });
     });
-
     describe('create', () => {
       it('Sends the correct request', () => {
         stripe.radar.valueLists.create({
@@ -38,7 +35,6 @@ describe('Radar', () => {
         });
       });
     });
-
     describe('list', () => {
       it('Sends the correct request', () => {
         stripe.radar.valueLists.list();
@@ -51,7 +47,6 @@ describe('Radar', () => {
         });
       });
     });
-
     describe('del', () => {
       it('Sends the correct request', () => {
         stripe.radar.valueLists.del('rsl_123');
@@ -64,7 +59,6 @@ describe('Radar', () => {
         });
       });
     });
-
     describe('update', () => {
       it('Sends the correct request', () => {
         stripe.radar.valueLists.update('rsl_123', {

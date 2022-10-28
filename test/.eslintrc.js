@@ -3,6 +3,10 @@ module.exports = {
     mocha: true,
   },
   plugins: ['chai-friendly'],
+  parserOptions: {
+    sourceType: 'module',
+    allowImportExportEverywhere: true,
+  },
   rules: {
     'no-loop-func': 'off',
     'no-sync': 'off',

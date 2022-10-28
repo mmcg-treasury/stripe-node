@@ -1,9 +1,8 @@
-'use strict';
-
-const stripe = require('../../../testUtils').getSpyableStripe();
-
-const expect = require('chai').expect;
-
+import testUtils from '../../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('BillingPortal', () => {
   describe('Sessions Resource', () => {
     describe('create', () => {
@@ -13,7 +12,6 @@ describe('BillingPortal', () => {
           return_url: 'https://stripe.com/return',
         };
         stripe.billingPortal.sessions.create(params);
-
         expect(stripe.LAST_REQUEST).to.deep.equal({
           method: 'POST',
           url: '/v1/billing_portal/sessions',

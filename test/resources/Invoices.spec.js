@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Invoices Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.invoices.create({application_fee: 111});
@@ -29,7 +28,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.invoices.list({count: 25});
@@ -42,7 +40,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.invoices.update('in_123', {application_fee: 200});
@@ -55,7 +52,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('del', () => {
     it('Sends the correct request', () => {
       stripe.invoices.del('in_123');
@@ -68,7 +64,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('listLineItems', () => {
     it('Sends the correct request', () => {
       stripe.invoices.listLineItems('in_123');
@@ -81,7 +76,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('listUpcomingLines', () => {
     it('Sends the correct request', () => {
       stripe.invoices.listUpcomingLines();
@@ -94,14 +88,12 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('retrieveUpcoming', () => {
     it('Sends the correct request', () => {
       stripe.invoices.retrieveUpcoming({
         customer: 'cus_abc',
         subscription_items: [{plan: 'potato'}, {plan: 'rutabaga'}],
       });
-
       expect(stripe.LAST_REQUEST).to.deep.equal({
         method: 'GET',
         url:
@@ -112,7 +104,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('listUpcomingLineItems', () => {
     it('Sends the correct request', () => {
       stripe.invoices.listUpcomingLines({
@@ -120,7 +111,6 @@ describe('Invoices Resource', () => {
         subscription_items: [{plan: 'potato'}, {plan: 'rutabaga'}],
         limit: 5,
       });
-
       expect(stripe.LAST_REQUEST).to.deep.equal({
         method: 'GET',
         url:
@@ -131,7 +121,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('finalizeInvoice', () => {
     it('Sends the correct request', () => {
       stripe.invoices.finalizeInvoice('in_123');
@@ -144,7 +133,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('mark uncollectible', () => {
     it('Sends the correct request', () => {
       stripe.invoices.markUncollectible('in_123');
@@ -157,7 +145,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('pay', () => {
     it('Sends the correct request', () => {
       stripe.invoices.pay('in_123', {
@@ -172,7 +159,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('sendInvoice', () => {
     it('Sends the correct request', () => {
       stripe.invoices.sendInvoice('in_123');
@@ -185,7 +171,6 @@ describe('Invoices Resource', () => {
       });
     });
   });
-
   describe('voidInvoice', () => {
     it('Sends the correct request', () => {
       stripe.invoices.voidInvoice('in_123');

@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Issuing', () => {
   describe('Authorization Resource', () => {
     describe('retrieve', () => {
@@ -17,7 +17,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('list', () => {
       it('Sends the correct request', () => {
         stripe.issuing.authorizations.list();
@@ -30,7 +29,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('update', () => {
       it('Sends the correct request', () => {
         stripe.issuing.authorizations.update('iauth_123', {
@@ -53,7 +51,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('approve', () => {
       it('Sends the correct request', () => {
         stripe.issuing.authorizations.approve('iauth_123');
@@ -66,7 +63,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('decline', () => {
       it('Sends the correct request', () => {
         stripe.issuing.authorizations.decline('iauth_123');

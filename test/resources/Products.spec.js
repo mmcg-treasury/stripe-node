@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Product Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('Product Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.products.create({
@@ -37,7 +36,6 @@ describe('Product Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.products.list({
@@ -51,7 +49,6 @@ describe('Product Resource', () => {
         settings: {},
       });
     });
-
     it('Supports filtering by shippable', () => {
       stripe.products.list({
         shippable: true,
@@ -65,7 +62,6 @@ describe('Product Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.products.update('productIdFoo3242', {caption: 'test'});
@@ -78,7 +74,6 @@ describe('Product Resource', () => {
       });
     });
   });
-
   describe('del', () => {
     it('Sends the correct request', () => {
       stripe.products.del('productIdFoo3242');

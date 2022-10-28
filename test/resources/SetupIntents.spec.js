@@ -1,10 +1,9 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 const SETUP_INTENT_TEST_ID = 'seti_123';
-
 describe('Setup Intents Resource', () => {
   describe('create', () => {
     it('Sends the correct request', () => {
@@ -21,7 +20,6 @@ describe('Setup Intents Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.setupIntents.list();
@@ -34,7 +32,6 @@ describe('Setup Intents Resource', () => {
       });
     });
   });
-
   describe('retrieve', () => {
     it('Sends the correct request', () => {
       stripe.setupIntents.retrieve(SETUP_INTENT_TEST_ID);
@@ -47,7 +44,6 @@ describe('Setup Intents Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.setupIntents.update(SETUP_INTENT_TEST_ID, {
@@ -62,7 +58,6 @@ describe('Setup Intents Resource', () => {
       });
     });
   });
-
   describe('cancel', () => {
     it('Sends the correct request', () => {
       stripe.setupIntents.cancel(SETUP_INTENT_TEST_ID);
@@ -75,7 +70,6 @@ describe('Setup Intents Resource', () => {
       });
     });
   });
-
   describe('confirm', () => {
     it('Sends the correct request', () => {
       stripe.setupIntents.confirm(SETUP_INTENT_TEST_ID);

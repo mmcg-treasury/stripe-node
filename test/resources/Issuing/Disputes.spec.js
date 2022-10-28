@@ -1,15 +1,13 @@
-'use strict';
-
-const stripe = require('../../../testUtils').getSpyableStripe();
-
-const expect = require('chai').expect;
-
+import testUtils from '../../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Issuing', () => {
   describe('Disputes Resource', () => {
     describe('retrieve', () => {
       it('Sends the correct request', () => {
         stripe.issuing.disputes.retrieve('idp_123');
-
         expect(stripe.LAST_REQUEST).to.deep.equal({
           method: 'GET',
           url: '/v1/issuing/disputes/idp_123',
@@ -19,7 +17,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('create', () => {
       it('Sends the correct request', () => {
         stripe.issuing.disputes.create({
@@ -36,7 +33,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('update', () => {
       it('Sends the correct request', () => {
         stripe.issuing.disputes.update('idp_123', {
@@ -59,7 +55,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('list', () => {
       it('Sends the correct request', () => {
         stripe.issuing.disputes.list();
@@ -72,7 +67,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('submit', () => {
       it('Sends the correct request', () => {
         stripe.issuing.disputes.submit('idp_123', {

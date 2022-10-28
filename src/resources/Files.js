@@ -1,14 +1,11 @@
+import multipart from '../multipart.js';
+import * as StripeResource from '../StripeResource.js';
 // File generated from our OpenAPI spec
-
-'use strict';
-
-const {multipartRequestDataProcessor} = require('../multipart');
-const StripeResource = require('../StripeResource');
+('use strict');
+const {multipartRequestDataProcessor} = multipart;
 const stripeMethod = StripeResource.method;
-
-module.exports = StripeResource.extend({
+export default StripeResource.extend({
   path: 'files',
-
   create: stripeMethod({
     method: 'POST',
     headers: {
@@ -16,17 +13,14 @@ module.exports = StripeResource.extend({
     },
     host: 'files.stripe.com',
   }),
-
   retrieve: stripeMethod({
     method: 'GET',
     path: '/{file}',
   }),
-
   list: stripeMethod({
     method: 'GET',
     path: '',
     methodType: 'list',
   }),
-
   requestDataProcessor: multipartRequestDataProcessor,
 });

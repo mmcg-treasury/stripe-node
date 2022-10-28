@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Plans Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('Plans Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.plans.create({
@@ -31,7 +30,6 @@ describe('Plans Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request for metered', () => {
       stripe.plans.create({
         amount: 200,
@@ -46,7 +44,6 @@ describe('Plans Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request for tiered plans', () => {
       stripe.plans.create({
         currency: 'usd',
@@ -73,7 +70,6 @@ describe('Plans Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request for transform usage plans', () => {
       stripe.plans.create({
         amount: 200,
@@ -93,7 +89,6 @@ describe('Plans Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.plans.update('plan_123', {
@@ -108,7 +103,6 @@ describe('Plans Resource', () => {
       });
     });
   });
-
   describe('del', () => {
     it('Sends the correct request', () => {
       stripe.plans.del('plan_123');
@@ -121,7 +115,6 @@ describe('Plans Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.plans.list();

@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Tokens Resource', () => {
   describe('create', () => {
     it('Sends the correct request', () => {
@@ -18,7 +18,6 @@ describe('Tokens Resource', () => {
       });
     });
   });
-
   describe('retrieve', () => {
     it('Sends the correct request', () => {
       stripe.tokens.retrieve('tokenId1');

@@ -1,10 +1,9 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 const TEST_AUTH_KEY = 'aGN0bIwXnHdw5645VABjPdSn8nWY7G11';
-
 describe('Customers Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -17,7 +16,6 @@ describe('Customers Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request [with specified auth]', () => {
       stripe.customers.retrieve('cus_123', TEST_AUTH_KEY);
       expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -30,7 +28,6 @@ describe('Customers Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.customers.create({description: 'Some customer'});
@@ -42,7 +39,6 @@ describe('Customers Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request [with specified auth]', () => {
       stripe.customers.create({description: 'Some customer'}, TEST_AUTH_KEY);
       expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -54,7 +50,6 @@ describe('Customers Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request [with specified auth and no body]', () => {
       stripe.customers.create(TEST_AUTH_KEY);
       expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -66,7 +61,6 @@ describe('Customers Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request [with specified idempotencyKey in options]', () => {
       stripe.customers.create(
         {description: 'Some customer'},
@@ -80,7 +74,6 @@ describe('Customers Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request [with specified auth in options]', () => {
       stripe.customers.create(
         {description: 'Some customer'},
@@ -95,7 +88,6 @@ describe('Customers Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request [with specified auth and idempotent key in options]', () => {
       stripe.customers.create(
         {description: 'Some customer'},
@@ -110,7 +102,6 @@ describe('Customers Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request [with specified auth in options and no body]', () => {
       stripe.customers.create({apiKey: TEST_AUTH_KEY});
       expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -123,7 +114,6 @@ describe('Customers Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.customers.update('cus_123', {
@@ -138,7 +128,6 @@ describe('Customers Resource', () => {
       });
     });
   });
-
   describe('del', () => {
     it('Sends the correct request', () => {
       stripe.customers.del('cus_123');
@@ -151,7 +140,6 @@ describe('Customers Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.customers.list();
@@ -163,7 +151,6 @@ describe('Customers Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request [with specified auth]', () => {
       stripe.customers.list(TEST_AUTH_KEY);
       expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -176,7 +163,6 @@ describe('Customers Resource', () => {
       });
     });
   });
-
   describe('Discount methods', () => {
     describe('deleteDiscount', () => {
       it('Sends the correct request', () => {
@@ -191,7 +177,6 @@ describe('Customers Resource', () => {
       });
     });
   });
-
   describe('Source methods', () => {
     describe('retrieveSource', () => {
       it('Sends the correct request', () => {
@@ -204,7 +189,6 @@ describe('Customers Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.customers.retrieveSource('cus_123', 'card_123', TEST_AUTH_KEY);
         expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -217,7 +201,6 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('createSource', () => {
       it('Sends the correct request', () => {
         const params = {
@@ -237,7 +220,6 @@ describe('Customers Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         const params = {
           source: {
@@ -258,7 +240,6 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('updateSource', () => {
       it('Sends the correct request', () => {
         stripe.customers.updateSource('cus_123', 'card_123', {
@@ -273,7 +254,6 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('deleteSource', () => {
       it('Sends the correct request', () => {
         stripe.customers.deleteSource('cus_123', 'card_123');
@@ -285,7 +265,6 @@ describe('Customers Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.customers.deleteSource('cus_123', 'card_123', TEST_AUTH_KEY);
         expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -298,7 +277,6 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('listSources', () => {
       it('Sends the correct request', () => {
         stripe.customers.listSources('cus_123');
@@ -310,7 +288,6 @@ describe('Customers Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.customers.listSources('cus_123', TEST_AUTH_KEY);
         expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -323,11 +300,9 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('verifySource', () => {
       it('Sends the correct request', () => {
         const data = {amounts: [32, 45]};
-
         stripe.customers.verifySource(
           'cus_123',
           'card_123',
@@ -345,7 +320,6 @@ describe('Customers Resource', () => {
       });
     });
   });
-
   describe('TaxId methods', () => {
     describe('retrieveTaxId', () => {
       it('Sends the correct request', () => {
@@ -359,7 +333,6 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('createTaxId', () => {
       it('Sends the correct request', () => {
         const data = {
@@ -376,7 +349,6 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('deleteTaxId', () => {
       it('Sends the correct request', () => {
         stripe.customers.deleteTaxId('cus_123', 'txi_123');
@@ -389,7 +361,6 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('listTaxIds', () => {
       it('Sends the correct request', () => {
         stripe.customers.listTaxIds('cus_123');
@@ -403,7 +374,6 @@ describe('Customers Resource', () => {
       });
     });
   });
-
   describe('BalanceTransaction methods', () => {
     describe('retrieveBalanceTransaction', () => {
       it('Sends the correct request', () => {
@@ -417,7 +387,6 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('createBalanceTransaction', () => {
       it('Sends the correct request', () => {
         stripe.customers.createBalanceTransaction('cus_123', {
@@ -433,7 +402,6 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('updateBalanceTransaction', () => {
       it('Sends the correct request', () => {
         stripe.customers.updateBalanceTransaction('cus_123', 'cbtxn_123', {
@@ -448,7 +416,6 @@ describe('Customers Resource', () => {
         });
       });
     });
-
     describe('listBalanceTransactions', () => {
       it('Sends the correct request', () => {
         stripe.customers.listBalanceTransactions('cus_123');

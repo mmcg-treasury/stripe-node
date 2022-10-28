@@ -1,10 +1,9 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 const SCHEDULE_TEST_ID = 'sub_sched_123';
-
 describe('Subscription Schedule Resource', () => {
   describe('cancel', () => {
     it('Sends the correct request', () => {
@@ -21,7 +20,6 @@ describe('Subscription Schedule Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       const data = {
@@ -37,7 +35,6 @@ describe('Subscription Schedule Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.subscriptionSchedules.list();
@@ -50,7 +47,6 @@ describe('Subscription Schedule Resource', () => {
       });
     });
   });
-
   describe('release', () => {
     it('Sends the correct request', () => {
       const data = {
@@ -66,7 +62,6 @@ describe('Subscription Schedule Resource', () => {
       });
     });
   });
-
   describe('retrieve', () => {
     it('Sends the correct request', () => {
       stripe.subscriptionSchedules.retrieve(SCHEDULE_TEST_ID);
@@ -79,7 +74,6 @@ describe('Subscription Schedule Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       const data = {metadata: {key: 'value'}};

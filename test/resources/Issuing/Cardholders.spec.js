@@ -1,15 +1,13 @@
-'use strict';
-
-const stripe = require('../../../testUtils').getSpyableStripe();
-
-const expect = require('chai').expect;
-
+import testUtils from '../../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Issuing', () => {
   describe('Cardholders Resource', () => {
     describe('retrieve', () => {
       it('Sends the correct request', () => {
         stripe.issuing.cardholders.retrieve('ich_123');
-
         expect(stripe.LAST_REQUEST).to.deep.equal({
           method: 'GET',
           url: '/v1/issuing/cardholders/ich_123',
@@ -19,7 +17,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('create', () => {
       it('Sends the correct request', () => {
         stripe.issuing.cardholders.create({
@@ -40,7 +37,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('update', () => {
       it('Sends the correct request', () => {
         stripe.issuing.cardholders.update('ich_123', {
@@ -63,7 +59,6 @@ describe('Issuing', () => {
         });
       });
     });
-
     describe('list', () => {
       it('Sends the correct request', () => {
         stripe.issuing.cardholders.list();

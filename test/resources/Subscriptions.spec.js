@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('subscriptions Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('subscriptions Resource', () => {
       });
     });
   });
-
   describe('del', () => {
     it('Sends the correct request', () => {
       stripe.subscriptions.del('test_sub');
@@ -29,7 +28,6 @@ describe('subscriptions Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.subscriptions.update('test_sub', {
@@ -46,14 +44,12 @@ describe('subscriptions Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.subscriptions.create({
         customer: 'test_cus',
         plan: 'gold',
       });
-
       expect(stripe.LAST_REQUEST).to.deep.equal({
         method: 'POST',
         url: '/v1/subscriptions',
@@ -66,7 +62,6 @@ describe('subscriptions Resource', () => {
       });
     });
   });
-
   describe('update with items array', () => {
     it('Sends the correct request', () => {
       stripe.subscriptions.update('test_sub', {
@@ -93,7 +88,6 @@ describe('subscriptions Resource', () => {
       });
     });
   });
-
   describe('create with items array', () => {
     it('Sends the correct request', () => {
       stripe.subscriptions.create({
@@ -104,7 +98,6 @@ describe('subscriptions Resource', () => {
           },
         ],
       });
-
       expect(stripe.LAST_REQUEST).to.deep.equal({
         method: 'POST',
         url: '/v1/subscriptions',
@@ -121,7 +114,6 @@ describe('subscriptions Resource', () => {
       });
     });
   });
-
   describe('update with items object', () => {
     it('Sends the correct request', () => {
       stripe.subscriptions.update('test_sub', {
@@ -148,7 +140,6 @@ describe('subscriptions Resource', () => {
       });
     });
   });
-
   describe('create with items object', () => {
     it('Sends the correct request', () => {
       stripe.subscriptions.create({
@@ -159,7 +150,6 @@ describe('subscriptions Resource', () => {
           },
         },
       });
-
       expect(stripe.LAST_REQUEST).to.deep.equal({
         method: 'POST',
         url: '/v1/subscriptions',
@@ -176,7 +166,6 @@ describe('subscriptions Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.subscriptions.list({
@@ -193,7 +182,6 @@ describe('subscriptions Resource', () => {
       });
     });
   });
-
   describe('Discount methods', () => {
     describe('deleteDiscount', () => {
       it('Sends the correct request', () => {

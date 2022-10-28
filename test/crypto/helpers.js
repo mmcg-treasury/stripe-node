@@ -1,9 +1,7 @@
-'use strict';
-
-const expect = require('chai').expect;
-
+import {expect as expect$0} from 'chai';
+('use strict');
+const expect = {expect: expect$0}.expect;
 const SECRET = 'test_secret';
-
 /**
  * Test runner which runs a common set of tests for a given CryptoProvider to
  * make sure it satisfies the expected contract.
@@ -29,7 +27,6 @@ const createCryptoProviderTestSuite = (cryptoProvider, isAsyncOnly = false) => {
         '837da296d05c4fe31f61d5d7ead035099d9585a5bcde87de952012a78f0b0c43',
     },
   ];
-
   describe('CryptoProviderTestSuite', () => {
     if (!isAsyncOnly) {
       describe('computeHMACSignature', () => {
@@ -42,7 +39,6 @@ const createCryptoProviderTestSuite = (cryptoProvider, isAsyncOnly = false) => {
         }
       });
     }
-
     describe('computeHMACSignatureAsync', () => {
       for (const testCase of testCases) {
         it(testCase.caseName, async () => {
@@ -56,5 +52,7 @@ const createCryptoProviderTestSuite = (cryptoProvider, isAsyncOnly = false) => {
     });
   });
 };
-
-module.exports = {createCryptoProviderTestSuite};
+export {createCryptoProviderTestSuite};
+export default {
+  createCryptoProviderTestSuite,
+};

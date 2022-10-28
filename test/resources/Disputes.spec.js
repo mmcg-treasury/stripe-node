@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Dispute Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('Dispute Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.disputes.list();
@@ -29,7 +28,6 @@ describe('Dispute Resource', () => {
       });
     });
   });
-
   describe('close', () => {
     it('Sends the correct request', () => {
       stripe.disputes.close('dp_123');
@@ -42,7 +40,6 @@ describe('Dispute Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.disputes.update('dp_123', {evidence: {customer_name: 'Bob'}});

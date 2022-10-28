@@ -1,10 +1,9 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 const TEST_AUTH_KEY = 'aGN0bIwXnHdw5645VABjPdSn8nWY7G11';
-
 describe('Account Resource', () => {
   function uniqueEmail() {
     return `${Math.random()}bob@example.com`;
@@ -26,7 +25,6 @@ describe('Account Resource', () => {
       });
     });
   });
-
   describe('delete', () => {
     it('deletes an account successfully', () => {
       stripe.account.del('acct_16Tzq6DBahdM4C8s');
@@ -39,7 +37,6 @@ describe('Account Resource', () => {
       });
     });
   });
-
   describe('reject', () => {
     it('rejects an account successfully', () => {
       stripe.account.reject('acct_16Tzq6DBahdM4C8s', {reason: 'fraud'});
@@ -52,7 +49,6 @@ describe('Account Resource', () => {
       });
     });
   });
-
   describe('retrieve', () => {
     it('Sends the correct request with no params', () => {
       stripe.account.retrieve();
@@ -64,7 +60,6 @@ describe('Account Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request with ID param', () => {
       stripe.account.retrieve('foo');
       expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -75,7 +70,6 @@ describe('Account Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request with secret key', () => {
       const key = 'sk_12345678901234567890123456789012';
       stripe.account.retrieve(null, key);
@@ -88,7 +82,6 @@ describe('Account Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request with secret key as first object', () => {
       const params = {apiKey: 'sk_12345678901234567890123456789012'};
       stripe.account.retrieve(params);
@@ -101,7 +94,6 @@ describe('Account Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request with a callback', () => {
       stripe.account.retrieve((err, account) => {});
       expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -113,7 +105,6 @@ describe('Account Resource', () => {
       });
     });
   });
-
   describe('Capability methods', () => {
     describe('listCapabilities', () => {
       it('Sends the correct request', () => {
@@ -126,7 +117,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.listCapabilities('acct_123', TEST_AUTH_KEY);
         expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -139,7 +129,6 @@ describe('Account Resource', () => {
         });
       });
     });
-
     describe('retrieveCapability', () => {
       it('Sends the correct request', () => {
         stripe.account.retrieveCapability('acct_123', 'acap_123');
@@ -151,7 +140,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.retrieveCapability(
           'acct_123',
@@ -168,7 +156,6 @@ describe('Account Resource', () => {
         });
       });
     });
-
     describe('updateCapability', () => {
       it('Sends the correct request', () => {
         stripe.account.updateCapability('acct_123', 'acap_123', {
@@ -182,7 +169,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.updateCapability(
           'acct_123',
@@ -203,7 +189,6 @@ describe('Account Resource', () => {
       });
     });
   });
-
   describe('External account methods', () => {
     describe('retrieveExternalAccount', () => {
       it('Sends the correct request', () => {
@@ -220,7 +205,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.retrieveExternalAccount(
           'accountIdFoo321',
@@ -238,7 +222,6 @@ describe('Account Resource', () => {
         });
       });
     });
-
     describe('createExternalAccount', () => {
       it('Sends the correct request', () => {
         stripe.account.createExternalAccount('accountIdFoo321', {
@@ -254,7 +237,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.createExternalAccount(
           'accountIdFoo321',
@@ -275,7 +257,6 @@ describe('Account Resource', () => {
         });
       });
     });
-
     describe('updateExternalAccount', () => {
       it('Sends the correct request', () => {
         stripe.account.updateExternalAccount(
@@ -295,7 +276,6 @@ describe('Account Resource', () => {
         });
       });
     });
-
     describe('deleteExternalAccount', () => {
       it('Sends the correct request', () => {
         stripe.account.deleteExternalAccount(
@@ -311,7 +291,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.deleteExternalAccount(
           'accountIdFoo321',
@@ -329,7 +308,6 @@ describe('Account Resource', () => {
         });
       });
     });
-
     describe('listExternalAccounts', () => {
       it('Sends the correct request', () => {
         stripe.account.listExternalAccounts('accountIdFoo321');
@@ -341,7 +319,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.listExternalAccounts('accountIdFoo321', TEST_AUTH_KEY);
         expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -355,7 +332,6 @@ describe('Account Resource', () => {
       });
     });
   });
-
   describe('LoginLink methods', () => {
     describe('createLoginLink', () => {
       it('Sends the correct request', () => {
@@ -370,7 +346,6 @@ describe('Account Resource', () => {
       });
     });
   });
-
   describe('Person methods', () => {
     describe('retrievePerson', () => {
       it('Sends the correct request', () => {
@@ -383,7 +358,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.retrievePerson('acct_123', 'person_123', TEST_AUTH_KEY);
         expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -396,7 +370,6 @@ describe('Account Resource', () => {
         });
       });
     });
-
     describe('createPerson', () => {
       it('Sends the correct request', () => {
         stripe.account.createPerson('acct_123', {
@@ -410,7 +383,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.createPerson(
           'acct_123',
@@ -429,7 +401,6 @@ describe('Account Resource', () => {
         });
       });
     });
-
     describe('updatePerson', () => {
       it('Sends the correct request', () => {
         stripe.account.updatePerson('acct_123', 'person_123', {
@@ -443,7 +414,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.updatePerson(
           'acct_123',
@@ -463,7 +433,6 @@ describe('Account Resource', () => {
         });
       });
     });
-
     describe('deletePerson', () => {
       it('Sends the correct request', () => {
         stripe.account.deletePerson('acct_123', 'person_123');
@@ -475,7 +444,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.deletePerson('acct_123', 'person_123', TEST_AUTH_KEY);
         expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -488,7 +456,6 @@ describe('Account Resource', () => {
         });
       });
     });
-
     describe('listPersons', () => {
       it('Sends the correct request', () => {
         stripe.account.listPersons('acct_123');
@@ -500,7 +467,6 @@ describe('Account Resource', () => {
           settings: {},
         });
       });
-
       it('Sends the correct request [with specified auth]', () => {
         stripe.account.listPersons('acct_123', TEST_AUTH_KEY);
         expect(stripe.LAST_REQUEST).to.deep.equal({

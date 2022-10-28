@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Charge Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('Charge Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.charges.create({
@@ -45,7 +44,6 @@ describe('Charge Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.charges.list();
@@ -58,7 +56,6 @@ describe('Charge Resource', () => {
       });
     });
   });
-
   describe('capture', () => {
     it('Sends the correct request', () => {
       stripe.charges.capture('chargeIdExample3242', {amount: 23});
@@ -71,7 +68,6 @@ describe('Charge Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.charges.update('chargeIdExample3242', {description: 'foo321'});

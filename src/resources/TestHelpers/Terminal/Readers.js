@@ -1,13 +1,9 @@
+import * as StripeResource from '../../../StripeResource.js';
 // File generated from our OpenAPI spec
-
-'use strict';
-
-const StripeResource = require('../../../StripeResource');
+('use strict');
 const stripeMethod = StripeResource.method;
-
-module.exports = StripeResource.extend({
+export default StripeResource.extend({
   path: 'test_helpers/terminal/readers',
-
   presentPaymentMethod: stripeMethod({
     method: 'POST',
     path: '/{reader}/present_payment_method',

@@ -1,27 +1,22 @@
-'use strict';
-
-const testUtils = require('../testUtils');
-const chai = require('chai');
-const stripe = require('../lib/stripe')(testUtils.getUserStripeKey(), 'latest');
-const fs = require('fs');
-const path = require('path');
-const stream = require('stream');
+import testUtils from '../testUtils/index.js';
+import chai from 'chai';
+import stripe$0 from '../lib/stripe.js';
+import fs from 'fs';
+import path from 'path';
+import stream from 'stream';
+('use strict');
+const stripe = stripe$0(testUtils.getUserStripeKey(), 'latest');
 const expect = chai.expect;
-
 const CUSTOMER_DETAILS = {
   description: 'Some customer',
   card: 'tok_visa',
 };
-
 let CURRENCY = '_DEFAULT_CURRENCY_NOT_YET_GOTTEN_';
-
 describe('Flows', function() {
   // Note: These tests must be run as one so we can retrieve the
   // default_currency (required in subsequent tests);
-
   const cleanup = new testUtils.CleanupUtility();
   this.timeout(30000);
-
   it('Allows me to retrieve default_currency', () =>
     expect(
       stripe.account.retrieve().then((acct) => {
@@ -29,7 +24,6 @@ describe('Flows', function() {
         return acct;
       })
     ).to.eventually.have.property('default_currency'));
-
   describe('Plan+Subscription flow', () => {
     it('Allows me to: Create a plan and subscribe a customer to it', () =>
       expect(
@@ -48,17 +42,14 @@ describe('Flows', function() {
         ]).then((j) => {
           const plan = j[0];
           const customer = j[1];
-
           cleanup.deleteCustomer(customer.id);
           cleanup.deletePlan(plan.id);
-
           return stripe.subscriptions.create({
             customer: customer.id,
             plan: plan.id,
           });
         })
       ).to.eventually.have.property('status', 'active'));
-
     it('Allows me to: Create a plan and subscribe a customer to it, and update subscription', () => {
       let plan;
       return expect(
@@ -78,10 +69,8 @@ describe('Flows', function() {
           .then((j) => {
             plan = j[0];
             const customer = j[1];
-
             cleanup.deleteCustomer(customer.id);
             cleanup.deletePlan(plan.id);
-
             return stripe.subscriptions.create({
               customer: customer.id,
               plan: plan.id,
@@ -96,12 +85,10 @@ describe('Flows', function() {
           .then((subscription) => [subscription.status, subscription.quantity])
       ).to.eventually.deep.equal(['active', 3]);
     });
-
     it('Errors when I attempt to subscribe a customer to a non-existent plan', () =>
       expect(
         stripe.customers.create(CUSTOMER_DETAILS).then((customer) => {
           cleanup.deleteCustomer(customer.id);
-
           return stripe.subscriptions
             .create({
               customer: customer.id,
@@ -119,7 +106,6 @@ describe('Flows', function() {
           err.type === 'StripeInvalidRequestError' &&
           err.rawType === 'invalid_request_error'
       ));
-
     it('Allows me to: subscribe then update with `cancel_at_period_end` defined', () =>
       expect(
         Promise.all([
@@ -138,10 +124,8 @@ describe('Flows', function() {
           .then((j) => {
             const plan = j[0];
             const customer = j[1];
-
             cleanup.deleteCustomer(customer.id);
             cleanup.deletePlan(plan.id);
-
             return stripe.subscriptions.create({
               customer: customer.id,
               plan: plan.id,
@@ -153,7 +137,6 @@ describe('Flows', function() {
             })
           )
       ).to.eventually.have.property('cancel_at_period_end', true));
-
     describe('Plan name variations', () => {
       [
         `34535_355453${testUtils.getRandomString()}`,
@@ -182,11 +165,9 @@ describe('Flows', function() {
       });
     });
   });
-
   describe('Coupon flow', () => {
     let customer;
     let coupon;
-
     describe('When I create a coupon & customer', () => {
       it('Does so', () =>
         expect(
@@ -230,7 +211,6 @@ describe('Flows', function() {
       });
     });
   });
-
   describe('Expanding', () => {
     describe('A customer within a charge', () => {
       it('Allows you to expand a customer object', () =>
@@ -263,7 +243,6 @@ describe('Flows', function() {
         ).to.eventually.have.nested.property('default_source.exp_year'));
     });
   });
-
   describe('Charge', () => {
     it('Allows you to create a charge', () =>
       expect(
@@ -282,7 +261,6 @@ describe('Flows', function() {
           .then(null, (error) => error)
       ).to.eventually.have.nested.property('raw.charge'));
   });
-
   describe('Getting balance', () => {
     it('Allows me to do so', () =>
       expect(stripe.balance.retrieve()).to.eventually.have.property(
@@ -294,10 +272,8 @@ describe('Flows', function() {
         stripe.balance.retrieve(testUtils.getUserStripeKey())
       ).to.eventually.have.property('object', 'balance'));
   });
-
   describe('Request/Response Events', () => {
     let connectedAccountId;
-
     before((done) => {
       // Pick a random connected account to use in the `Stripe-Account` header
       stripe.accounts
@@ -312,20 +288,16 @@ describe('Flows', function() {
               )
             );
           }
-
           connectedAccountId = accounts.data[0].id;
-
           done();
         });
     });
-
     it('should emit a `request` event to listeners on request', (done) => {
       const apiVersion = '2017-06-05';
       const idempotencyKey = Math.random()
         .toString(36)
         .slice(2);
       const lowerBoundStartTime = Date.now();
-
       function onRequest(request) {
         expect(request.api_version).to.equal('latest');
         expect(request.idempotency_key).to.equal(idempotencyKey);
@@ -336,12 +308,9 @@ describe('Flows', function() {
           lowerBoundStartTime,
           Date.now()
         );
-
         done();
       }
-
       stripe.once('request', onRequest);
-
       stripe.customers
         .create(
           {
@@ -358,22 +327,18 @@ describe('Flows', function() {
           // I expect there to be an error here.
         });
     });
-
     it('should emit a `response` event to listeners on response', (done) => {
       const apiVersion = '2017-06-05';
       const idempotencyKey = Math.random()
         .toString(36)
         .slice(2);
-
       function onResponse(response) {
         // On the off chance we're picking up a response from a differentrequest
         // then just ignore this and wait for the right one:
         if (response.idempotency_key !== idempotencyKey) {
           return;
         }
-
         stripe.off('response', onResponse);
-
         expect(response.api_version).to.equal(apiVersion);
         expect(response.idempotency_key).to.equal(idempotencyKey);
         expect(response.account).to.equal(connectedAccountId);
@@ -388,12 +353,9 @@ describe('Flows', function() {
           response.request_end_time,
           Date.now()
         );
-
         done();
       }
-
       stripe.on('response', onResponse);
-
       stripe.customers
         .create(
           {
@@ -410,15 +372,12 @@ describe('Flows', function() {
           // I expect there to be an error here.
         });
     });
-
     it('should not emit a `response` event to removed listeners on response', (done) => {
       function onResponse(response) {
         done(new Error('How did you get here?'));
       }
-
       stripe.once('response', onResponse);
       stripe.off('response', onResponse);
-
       stripe.customers
         .create({
           description: 'stripe-node test customer',
@@ -428,12 +387,10 @@ describe('Flows', function() {
         });
     });
   });
-
   describe('File', () => {
     it('Allows you to upload a file as a stream', () => {
       const testFilename = path.join(__dirname, 'resources/data/minimal.pdf');
       const f = fs.createReadStream(testFilename);
-
       return expect(
         stripe.files
           .create({
@@ -447,11 +404,9 @@ describe('Flows', function() {
           .then(null, (error) => error)
       ).to.eventually.have.nested.property('size', 739);
     });
-
     it('Allows you to upload a file synchronously', () => {
       const testFilename = path.join(__dirname, 'resources/data/minimal.pdf');
       const f = fs.readFileSync(testFilename);
-
       return expect(
         stripe.files
           .create({
@@ -465,17 +420,13 @@ describe('Flows', function() {
           .then(null, (error) => error)
       ).to.eventually.have.nested.property('size', 739);
     });
-
     it('Surfaces stream errors correctly', (done) => {
       const mockedStream = new stream.Readable();
       mockedStream._read = () => {};
-
       const fakeError = new Error('I am a fake error');
-
       process.nextTick(() => {
         mockedStream.emit('error', fakeError);
       });
-
       stripe.files
         .create({
           purpose: 'dispute_evidence',
@@ -490,7 +441,6 @@ describe('Flows', function() {
             'An error occurred while attempting to process the file for upload.'
           );
           expect(error.detail).to.equal(fakeError);
-
           done();
         });
     });

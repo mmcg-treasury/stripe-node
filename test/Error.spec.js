@@ -1,9 +1,5 @@
-'use strict';
-
-require('../testUtils');
-
-const Error = require('../lib/Error');
-const expect = require('chai').expect;
+import Error from '../lib/Error.js';
+import {expect} from 'chai';
 
 describe('Error', () => {
   describe('StripeError', () => {
@@ -24,7 +20,6 @@ describe('Error', () => {
         Error.StripeError.generate({type: 'weird_error'})
       ).to.be.instanceOf(Error.StripeUnknownError);
     });
-
     it('copies whitelisted properties', () => {
       const e = new Error.StripeError({
         charge: 'foo',
@@ -34,7 +29,6 @@ describe('Error', () => {
       expect(e).not.to.have.property('unknown_prop', 'bar');
       expect(e).not.to.have.property('decline_code', 'xyzzy');
     });
-
     it('Pulls in headers', () => {
       const headers = {'Request-Id': '123'};
       const e = Error.StripeError.generate({
@@ -43,7 +37,6 @@ describe('Error', () => {
       });
       expect(e).to.have.property('headers', headers);
     });
-
     it('Pulls in request IDs', () => {
       const e = Error.StripeError.generate({
         type: 'card_error',
@@ -51,7 +44,6 @@ describe('Error', () => {
       });
       expect(e).to.have.property('requestId', 'foo');
     });
-
     it('Pulls in HTTP status code', () => {
       const e = Error.StripeError.generate({
         type: 'card_error',
@@ -59,7 +51,6 @@ describe('Error', () => {
       });
       expect(e).to.have.property('statusCode', 400);
     });
-
     it('has subclasses which provide `.type` as their name', () => {
       class Foo extends Error.StripeError {}
       const err = new Foo({message: 'hi'});

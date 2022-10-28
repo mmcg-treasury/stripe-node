@@ -1,6 +1,5 @@
 'use strict';
-
-module.exports.awaitUntil = async function awaitUntil(iterator, limit) {
+export async function awaitUntil(iterator, limit) {
   const items = [];
   while (true) {
     const {value, done} = await iterator.next();
@@ -12,6 +11,6 @@ module.exports.awaitUntil = async function awaitUntil(iterator, limit) {
     if (items.length > limit) {
       throw Error('Kept iterating after break.');
     }
-  };
+  }
   return items;
 }

@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('SubscriptionItems Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('SubscriptionItems Resource', () => {
       });
     });
   });
-
   describe('del', () => {
     it('Sends the correct request', () => {
       stripe.subscriptionItems.del('test_sub_item');
@@ -29,7 +28,6 @@ describe('SubscriptionItems Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.subscriptionItems.update('test_sub_item', {
@@ -46,14 +44,12 @@ describe('SubscriptionItems Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.subscriptionItems.create({
         subscription: 'test_sub',
         plan: 'gold',
       });
-
       expect(stripe.LAST_REQUEST).to.deep.equal({
         method: 'POST',
         url: '/v1/subscription_items',
@@ -66,7 +62,6 @@ describe('SubscriptionItems Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.subscriptionItems.list({
@@ -82,7 +77,6 @@ describe('SubscriptionItems Resource', () => {
       });
     });
   });
-
   describe('createUsageRecord', () => {
     it('Sends the correct request', () => {
       const data = {
@@ -100,11 +94,9 @@ describe('SubscriptionItems Resource', () => {
       });
     });
   });
-
   describe('listUsageRecordSummaries', () => {
     it('Sends the correct request', () => {
       stripe.subscriptionItems.listUsageRecordSummaries('si_123', {});
-
       expect(stripe.LAST_REQUEST).to.deep.equal({
         method: 'GET',
         url: '/v1/subscription_items/si_123/usage_record_summaries',

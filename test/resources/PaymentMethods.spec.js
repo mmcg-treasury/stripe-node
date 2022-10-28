@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('PaymentMethods Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('PaymentMethods Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       const data = {
@@ -32,7 +31,6 @@ describe('PaymentMethods Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       const data = {
@@ -49,7 +47,6 @@ describe('PaymentMethods Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       const data = {
@@ -65,7 +62,6 @@ describe('PaymentMethods Resource', () => {
       });
     });
   });
-
   describe('attach', () => {
     it('Sends the correct request', () => {
       stripe.paymentMethods.attach('pm_123', {customer: 'cus_123'});
@@ -78,7 +74,6 @@ describe('PaymentMethods Resource', () => {
       });
     });
   });
-
   describe('detach', () => {
     it('Sends the correct request', () => {
       stripe.paymentMethods.detach('pm_123');

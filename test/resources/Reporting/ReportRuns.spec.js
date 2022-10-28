@@ -1,15 +1,13 @@
-'use strict';
-
-const stripe = require('../../../testUtils').getSpyableStripe();
-
-const expect = require('chai').expect;
-
+import testUtils from '../../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Reporting', () => {
   describe('ReportRuns Resource', () => {
     describe('retrieve', () => {
       it('Sends the correct request', () => {
         stripe.reporting.reportRuns.retrieve('frr_123');
-
         expect(stripe.LAST_REQUEST).to.deep.equal({
           method: 'GET',
           url: '/v1/reporting/report_runs/frr_123',
@@ -19,7 +17,6 @@ describe('Reporting', () => {
         });
       });
     });
-
     describe('create', () => {
       it('Sends the correct request', () => {
         stripe.reporting.reportRuns.create({
@@ -42,7 +39,6 @@ describe('Reporting', () => {
         });
       });
     });
-
     describe('list', () => {
       it('Sends the correct request', () => {
         stripe.reporting.reportRuns.list();

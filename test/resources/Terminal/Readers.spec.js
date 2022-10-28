@@ -1,15 +1,13 @@
-'use strict';
-
-const stripe = require('../../../testUtils').getSpyableStripe();
-
-const expect = require('chai').expect;
-
+import testUtils from '../../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Terminal', () => {
   describe('Readers Resource', () => {
     describe('retrieve', () => {
       it('Sends the correct request', () => {
         stripe.terminal.readers.retrieve('rdr_123');
-
         expect(stripe.LAST_REQUEST).to.deep.equal({
           method: 'GET',
           url: '/v1/terminal/readers/rdr_123',
@@ -19,7 +17,6 @@ describe('Terminal', () => {
         });
       });
     });
-
     describe('create', () => {
       it('Sends the correct request', () => {
         stripe.terminal.readers.create({
@@ -38,7 +35,6 @@ describe('Terminal', () => {
         });
       });
     });
-
     describe('del', () => {
       it('Sends the correct request', () => {
         stripe.terminal.readers.del('rdr_123');
@@ -51,7 +47,6 @@ describe('Terminal', () => {
         });
       });
     });
-
     describe('update', () => {
       it('Sends the correct request', () => {
         stripe.terminal.readers.update('rdr_123', {
@@ -68,7 +63,6 @@ describe('Terminal', () => {
         });
       });
     });
-
     describe('list', () => {
       it('Sends the correct request', () => {
         stripe.terminal.readers.list();

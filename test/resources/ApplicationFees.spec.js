@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('ApplicationFee Resource', () => {
   describe('list', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('ApplicationFee Resource', () => {
       });
     });
   });
-
   describe('refunds', () => {
     it('Sends the correct update request', () => {
       stripe.applicationFees.updateRefund(
@@ -33,7 +32,6 @@ describe('ApplicationFee Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct create request', () => {
       stripe.applicationFees.createRefund('appFeeIdExample3242', {amount: 100});
       expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -44,7 +42,6 @@ describe('ApplicationFee Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct list request', () => {
       stripe.applicationFees.listRefunds('appFeeIdExample3242');
       expect(stripe.LAST_REQUEST).to.deep.equal({
@@ -55,7 +52,6 @@ describe('ApplicationFee Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct retrieve request', () => {
       stripe.applicationFees.retrieveRefund(
         'appFeeIdExample3242',

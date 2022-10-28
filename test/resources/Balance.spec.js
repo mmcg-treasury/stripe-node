@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Balance Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -15,7 +15,6 @@ describe('Balance Resource', () => {
         settings: {},
       });
     });
-
     it('Sends the correct request [with specified auth]', () => {
       stripe.balance.retrieve('aGN0bIwXnHdw5645VABjPdSn8nWY7G11');
       expect(stripe.LAST_REQUEST).to.deep.equal({

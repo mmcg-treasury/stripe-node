@@ -1,25 +1,22 @@
-'use strict';
-
-const utils = require('../testUtils');
-const nock = require('nock');
-
-const stripe = require('../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-const testUtils = require('../testUtils');
-
-const {HttpClientResponse} = require('../lib/net/HttpClient');
-const StripeResource = require('../lib/StripeResource');
-const stripeMethod = StripeResource.method;
-
-const {
+import utils from '../testUtils/index.js';
+import nock from 'nock';
+import {expect as expect$0} from 'chai';
+import {HttpClientResponse} from '../lib/net/HttpClient.js';
+import StripeResource from '../lib/StripeResource.js';
+import {
   StripeAuthenticationError,
   StripeIdempotencyError,
   StripePermissionError,
   StripeRateLimitError,
   StripeError,
   StripeConnectionError,
-} = require('../lib/Error');
-
+} from '../lib/Error.js';
+import stripe$0 from '../lib/stripe.js';
+('use strict');
+const stripe = utils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
+const testUtils = utils;
+const stripeMethod = StripeResource.method;
 describe('StripeResource', () => {
   describe('createResourcePathWithSymbols', () => {
     it('Generates a path when there is a symbol', () => {
@@ -27,32 +24,27 @@ describe('StripeResource', () => {
       const path = stripe.invoices.createResourcePathWithSymbols('{id}');
       expect(path).to.equal('/invoices/{id}');
     });
-
     it('Generates a path when there is nothing beyond the resource path', () => {
       stripe.invoices.create({});
       const path = stripe.invoices.createResourcePathWithSymbols('');
       // This explicitly shouldn't have a trailing slash.
       expect(path).to.equal('/invoices');
     });
-
     it('Handles accidental double slashes', () => {
       stripe.invoices.create({});
       const path = stripe.invoices.createResourcePathWithSymbols('/{id}');
       expect(path).to.equal('/invoices/{id}');
     });
   });
-
   describe('_joinUrlParts', () => {
     it('includes trailing empty values', () => {
       const path = stripe.invoices._joinUrlParts(['a', '']);
       expect(path).to.equal('a/');
     });
-
     it('joins parts', () => {
       const path = stripe.invoices._joinUrlParts(['a', 'b', 'c']);
       expect(path).to.equal('a/b/c');
     });
-
     it('handles redundant slashes', () => {
       const path = stripe.invoices._joinUrlParts([
         '/v1/',
@@ -62,7 +54,6 @@ describe('StripeResource', () => {
       expect(path).to.equal('/v1/customers/{id}');
     });
   });
-
   describe('_makeHeaders', () => {
     it('sets the Authorization header with Bearer auth using the global API key', () => {
       const headers = stripe.invoices._makeHeaders(null, 0, null);
@@ -85,15 +76,12 @@ describe('StripeResource', () => {
       expect(headers).to.not.include.keys('Stripe-Version');
     });
   });
-
   describe('Parameter encoding', () => {
     // Use a real instance of stripe as we're mocking the http.request responses.
-    const realStripe = require('../lib/stripe')(utils.getUserStripeKey());
-
+    const realStripe = stripe$0(utils.getUserStripeKey());
     after(() => {
       nock.cleanAll();
     });
-
     describe('_request', () => {
       it('encodes data for GET requests as query params', (done) => {
         const data = {
@@ -108,7 +96,6 @@ describe('StripeResource', () => {
           path: '/v1/invoices/upcoming',
           data,
         };
-
         const scope = nock(
           `https://${options.host}`,
           // No Content-Length should be present for GET requests.
@@ -121,68 +108,57 @@ describe('StripeResource', () => {
             ''
           )
           .reply(200, '{}');
-
         realStripe.invoices.retrieveUpcoming(options.data, (err, response) => {
           done(err);
           scope.done();
         });
       });
-
       it('handles . as a query param', (done) => {
         const scope = nock(`https://${stripe.getConstant('DEFAULT_HOST')}`)
           .get('/v1/customers/.', '')
           .reply(200, '{}');
-
         realStripe.customers.retrieve('.', (err, response) => {
           done(err);
           scope.done();
         });
       });
-
       it('handles .. as a query param', (done) => {
         const scope = nock(`https://${stripe.getConstant('DEFAULT_HOST')}`)
           .get('/v1/customers/..', '')
           .reply(200, '{}');
-
         realStripe.customers.retrieve('..', (err, response) => {
           done(err);
           scope.done();
         });
       });
-
       it('handles empty string as a query param', (done) => {
         const scope = nock(`https://${stripe.getConstant('DEFAULT_HOST')}`)
           // Note this should always have a trailing space to avoid calling the
           // top level list endpoint (/v1/customers) and returning all customers.
           .get('/v1/customers/', '')
           .reply(200, '{}');
-
         realStripe.customers.retrieve('', (err, response) => {
           done(err);
           scope.done();
         });
       });
-
       it('handles empty string as a query param for namespaced resources', (done) => {
         const scope = nock(`https://${stripe.getConstant('DEFAULT_HOST')}`)
           // Note this should always have a trailing space to avoid calling the
           // top level list endpoint (/v1/customers) and returning all customers.
           .get('/v1/checkout/sessions/', '')
           .reply(200, '{}');
-
         realStripe.checkout.sessions.retrieve('', (err, response) => {
           done(err);
           scope.done();
         });
       });
-
       it('handles empty string as a query param for nested resources', (done) => {
         const scope = nock(`https://${stripe.getConstant('DEFAULT_HOST')}`)
           // Note this should always have a trailing space to avoid calling the
           // top level list endpoint (/v1/customers) and returning all customers.
           .get('/v1/customers/cus_123/balance_transactions/', '')
           .reply(200, '{}');
-
         realStripe.customers.retrieveBalanceTransaction(
           'cus_123',
           '',
@@ -192,47 +168,39 @@ describe('StripeResource', () => {
           }
         );
       });
-
       it('does not include trailing slash for endpoints without query parameters', (done) => {
         const scope = nock(`https://${stripe.getConstant('DEFAULT_HOST')}`)
           // Note that no trailing slash is present.
           .get('/v1/customers', '')
           .reply(200, '{}');
-
         realStripe.customers.list((err, response) => {
           done(err);
           scope.done();
         });
       });
-
       it('works correctly with undefined optional arguments', (done) => {
         const scope = nock(`https://${stripe.getConstant('DEFAULT_HOST')}`)
           .get('/v1/accounts/acct_123')
           .reply(200, '{}');
-
         realStripe.accounts.retrieve('acct_123', undefined, (err, response) => {
           done(err);
           scope.done();
         });
       });
-
       it('works correctly with null optional arguments', (done) => {
         const scope = nock(`https://${stripe.getConstant('DEFAULT_HOST')}`)
           .get('/v1/accounts/acct_123')
           .reply(200, '{}');
-
         realStripe.accounts.retrieve('acct_123', null, (err, response) => {
           done(err);
           scope.done();
         });
       });
-
       it('encodes data for DELETE requests as query params', (done) => {
         const data = {
           foo: 'bar',
         };
         const host = stripe.getConstant('DEFAULT_HOST');
-
         const scope = nock(
           `https://${host}`,
           // No Content-Length should be present for DELETE requests.
@@ -242,13 +210,11 @@ describe('StripeResource', () => {
         )
           .delete(/.*/)
           .reply(200, '{}');
-
         realStripe.invoiceItems.del('invoiceItemId1', data, (err, response) => {
           done(err);
           scope.done();
         });
       });
-
       it('encodes the body in POST requests', (done) => {
         const options = {
           host: stripe.getConstant('DEFAULT_HOST'),
@@ -263,7 +229,6 @@ describe('StripeResource', () => {
           body:
             'customer=cus_123&items[0][plan]=foo&items[0][quantity]=2&items[1][id]=si_123&items[1][deleted]=true',
         };
-
         const scope = nock(
           `https://${options.host}`,
           // Content-Length should be present for POST.
@@ -273,7 +238,6 @@ describe('StripeResource', () => {
         )
           .post(options.path, options.body)
           .reply(200, '{}');
-
         realStripe.subscriptions.update(
           'sub_123',
           options.data,
@@ -283,7 +247,6 @@ describe('StripeResource', () => {
           }
         );
       });
-
       it('always includes Content-Length in POST requests even when empty', (done) => {
         const options = {
           host: stripe.getConstant('DEFAULT_HOST'),
@@ -291,7 +254,6 @@ describe('StripeResource', () => {
           data: {},
           body: '',
         };
-
         const scope = nock(
           `https://${options.host}`,
           // Content-Length should be present for POST even when the body is
@@ -302,7 +264,6 @@ describe('StripeResource', () => {
         )
           .post(options.path, options.body)
           .reply(200, '{}');
-
         realStripe.subscriptions.update(
           'sub_123',
           options.data,
@@ -312,12 +273,10 @@ describe('StripeResource', () => {
           }
         );
       });
-
       it('allows overriding host', (done) => {
         const scope = nock('https://myhost')
           .get('/v1/accounts/acct_123')
           .reply(200, '{}');
-
         realStripe.accounts.retrieve(
           'acct_123',
           {},
@@ -332,14 +291,11 @@ describe('StripeResource', () => {
       });
     });
   });
-
   describe('Retry Network Requests', () => {
     // Use a real instance of stripe as we're mocking the http.request responses.
-    const realStripe = require('../lib/stripe')(utils.getUserStripeKey());
-
+    const realStripe = stripe$0(utils.getUserStripeKey());
     // Override the sleep timer to speed up tests
     realStripe.charges._getSleepTimeInMS = () => 0;
-
     const options = {
       host: stripe.getConstant('DEFAULT_HOST'),
       path: '/v1/charges',
@@ -351,29 +307,24 @@ describe('StripeResource', () => {
       },
       params: 'amount=1000&currency=usd&source=tok_visa&description=test',
     };
-
     afterEach(() => {
       realStripe._setApiNumberField('maxNetworkRetries', 0);
       stripe._setApiNumberField('maxNetworkRetries', 0);
     });
-
     after(() => {
       nock.cleanAll();
     });
-
     describe('_request', () => {
       it('throws an error on connection failure', (done) => {
         // Mock the connection error.
         nock(`https://${options.host}`)
           .post(options.path, options.params)
           .replyWithError('bad stuff');
-
         realStripe.charges.create(options.data, (err) => {
           expect(err.detail.message).to.deep.equal('bad stuff');
           done();
         });
       });
-
       it('throws an error on connection timeout', (done) => {
         return utils.getTestServerStripe(
           {timeout: 10},
@@ -395,7 +346,6 @@ describe('StripeResource', () => {
           }
         );
       });
-
       it('throws an error on invalid JSON', (done) => {
         return utils.getTestServerStripe(
           {},
@@ -439,7 +389,6 @@ describe('StripeResource', () => {
           }
         );
       });
-
       it('throws a StripeAuthenticationError on 401', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -448,14 +397,12 @@ describe('StripeResource', () => {
               message: 'message',
             },
           });
-
         realStripe.charges.create(options.data, (err) => {
           expect(err).to.be.an.instanceOf(StripeAuthenticationError);
           expect(err.message).to.be.equal('message');
           done();
         });
       });
-
       it('throws a StripePermissionError on 403', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -464,14 +411,12 @@ describe('StripeResource', () => {
               message: 'message',
             },
           });
-
         realStripe.charges.create(options.data, (err) => {
           expect(err).to.be.an.instanceOf(StripePermissionError);
           expect(err.message).to.be.equal('message');
           done();
         });
       });
-
       it('throws a StripeRateLimitError on 429', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -480,35 +425,29 @@ describe('StripeResource', () => {
               message: 'message',
             },
           });
-
         realStripe.charges.create(options.data, (err) => {
           expect(err).to.be.an.instanceOf(StripeRateLimitError);
           expect(err.message).to.be.equal('message');
           done();
         });
       });
-
       it('throws a StripeError based on the underlying error type', (done) => {
         const error = {
           type: 'idempotency_error',
         };
-
         expect(StripeError.generate(error)).to.be.an.instanceOf(
           StripeIdempotencyError
         );
-
         nock(`https://${options.host}`)
           .post(options.path, options.params)
           .reply(400, {
             error,
           });
-
         realStripe.charges.create(options.data, (err) => {
           expect(err).to.be.an.instanceOf(StripeIdempotencyError);
           done();
         });
       });
-
       it('retries connection timeout errors', (done) => {
         let nRequestsReceived = 0;
         return utils.getTestServerStripe(
@@ -531,7 +470,6 @@ describe('StripeResource', () => {
           }
         );
       });
-
       it('retries closed connection errors once', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -545,35 +483,29 @@ describe('StripeResource', () => {
             object: 'charge',
             amount: 1000,
           });
-
         realStripe.charges.create(options.data, (err, charge) => {
           expect(charge.id).to.equal('ch_123');
           done(err);
         });
       });
-
       it('throws on multiple closed connection errors', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
           .replyWithError({code: 'ECONNRESET'})
           .post(options.path, options.params)
           .replyWithError({code: 'ECONNRESET'});
-
         realStripe.charges.create(options.data, (err) => {
           expect(err.detail.code).to.deep.equal('ECONNRESET');
           done();
         });
       });
-
       it('should retry the request if max retries are set', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
           .replyWithError('bad stuff')
           .post(options.path, options.params)
           .replyWithError('worse stuff');
-
         realStripe._setApiNumberField('maxNetworkRetries', 1);
-
         realStripe.charges.create(options.data, (err) => {
           const errorMessage = realStripe.invoices._generateConnectionErrorMessage(
             1
@@ -583,7 +515,6 @@ describe('StripeResource', () => {
           done();
         });
       });
-
       it('should stop retrying after a successful retry', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -594,15 +525,12 @@ describe('StripeResource', () => {
             object: 'charge',
             amount: 1000,
           });
-
         realStripe._setApiNumberField('maxNetworkRetries', 2);
-
         realStripe.charges.create(options.data, (err, charge) => {
           expect(charge.id).to.equal('ch_123');
           done(err);
         });
       });
-
       it('should retry on a 409 error', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -617,15 +545,12 @@ describe('StripeResource', () => {
             object: 'charge',
             amount: 1000,
           });
-
         realStripe._setApiNumberField('maxNetworkRetries', 1);
-
         realStripe.charges.create(options.data, (err, charge) => {
           expect(charge.id).to.equal('ch_123');
           done(err);
         });
       });
-
       it('should not retry on a 400 error', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -634,15 +559,12 @@ describe('StripeResource', () => {
               type: 'card_error',
             },
           });
-
         realStripe._setApiNumberField('maxNetworkRetries', 1);
-
         realStripe.charges.create(options.data, (err) => {
           expect(err.type).to.equal('StripeCardError');
           done();
         });
       });
-
       it('should not retry when a header says not to', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -655,15 +577,12 @@ describe('StripeResource', () => {
             },
             {'stripe-should-retry': 'false'}
           );
-
         realStripe._setApiNumberField('maxNetworkRetries', 1);
-
         realStripe.charges.create(options.data, (err) => {
           expect(err.type).to.equal('StripeAPIError');
           done();
         });
       });
-
       it('should retry when a header says it should, even on status codes we ordinarily wouldnt', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -678,15 +597,12 @@ describe('StripeResource', () => {
             object: 'charge',
             amount: 1000,
           });
-
         realStripe._setApiNumberField('maxNetworkRetries', 1);
-
         realStripe.charges.create(options.data, (err, charge) => {
           expect(charge.id).to.equal('ch_123');
           done(err);
         });
       });
-
       it('should handle OAuth errors gracefully', (done) => {
         nock('https://connect.stripe.com')
           .post('/oauth/token')
@@ -695,15 +611,12 @@ describe('StripeResource', () => {
             error_description:
               'This authorization code has already been used. All tokens issued with this code have been revoked.',
           });
-
         realStripe._setApiNumberField('maxNetworkRetries', 1);
-
         realStripe.oauth.token(options.data, (err) => {
           expect(err.type).to.equal('StripeInvalidGrantError');
           done();
         });
       });
-
       it('should retry on a 503 error when the method is POST', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -718,15 +631,12 @@ describe('StripeResource', () => {
             object: 'charge',
             amount: 1000,
           });
-
         realStripe._setApiNumberField('maxNetworkRetries', 1);
-
         realStripe.charges.create(options.data, (err, charge) => {
           expect(charge.id).to.equal('ch_123');
           done(err);
         });
       });
-
       it('should retry on a 500 error when the method is GET', (done) => {
         nock(`https://${options.host}`)
           .get(`${options.path}/ch_123`)
@@ -741,18 +651,14 @@ describe('StripeResource', () => {
             object: 'charge',
             amount: 1000,
           });
-
         realStripe._setApiNumberField('maxNetworkRetries', 1);
-
         realStripe.charges.retrieve('ch_123', (err, charge) => {
           expect(charge.id).to.equal('ch_123');
           done(err);
         });
       });
-
       it('should add an idempotency key for retries using the POST method', (done) => {
         let headers;
-
         // Fail the first request but succeed on the 2nd.
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -760,7 +666,6 @@ describe('StripeResource', () => {
           .post(options.path, options.params)
           .reply(function(uri, requestBody, cb) {
             headers = this.req.headers;
-
             return cb(null, [
               200,
               {
@@ -770,25 +675,20 @@ describe('StripeResource', () => {
               },
             ]);
           });
-
         realStripe._setApiNumberField('maxNetworkRetries', 1);
-
         realStripe.charges.create(options.data, (err) => {
           expect(headers).to.have.property('idempotency-key');
           done(err);
         });
       });
-
       it('should not add idempotency key for retries using the GET method', (done) => {
         let headers;
-
         nock(`https://${options.host}`)
           .get(`${options.path}/ch_123`)
           .replyWithError('bad stuff')
           .get(`${options.path}/ch_123`)
           .reply(function(uri, requestBody, cb) {
             headers = this.req.headers;
-
             return cb(null, [
               200,
               {
@@ -798,26 +698,21 @@ describe('StripeResource', () => {
               },
             ]);
           });
-
         realStripe._setApiNumberField('maxNetworkRetries', 1);
-
         realStripe.charges.retrieve('ch_123', () => {
           expect(headers).to.not.have.property('idempotency-key');
           done();
         });
       });
-
       it('should reuse the given idempotency key provided for retries', (done) => {
         const key = 'i-am-a-key';
         let headers;
-
         nock(`https://${options.host}`)
           .post(options.path, options.params)
           .replyWithError('bad stuff')
           .post(options.path, options.params)
           .reply(function(uri, requestBody, cb) {
             headers = this.req.headers;
-
             return cb(null, [
               200,
               {
@@ -827,7 +722,6 @@ describe('StripeResource', () => {
               },
             ]);
           });
-
         realStripe.charges.create(
           options.data,
           {idempotencyKey: key, maxNetworkRetries: 1},
@@ -837,7 +731,6 @@ describe('StripeResource', () => {
           }
         );
       });
-
       it('should allow the setting of network retries on a per-request basis', (done) => {
         nock(`https://${options.host}`)
           .post(options.path, options.params)
@@ -853,7 +746,6 @@ describe('StripeResource', () => {
               },
             ]);
           });
-
         realStripe.charges.create(
           options.data,
           {maxNetworkRetries: 1},
@@ -863,10 +755,8 @@ describe('StripeResource', () => {
           }
         );
       });
-
       it('should pick the per-request network retry setting if a global setting is set', (done) => {
         realStripe._setApiNumberField('maxNetworkRetries', 0);
-
         nock(`https://${options.host}`)
           .post(options.path, options.params)
           .replyWithError('bad stuff')
@@ -881,7 +771,6 @@ describe('StripeResource', () => {
               },
             ]);
           });
-
         realStripe.charges.create(
           options.data,
           {maxNetworkRetries: 1},
@@ -891,7 +780,6 @@ describe('StripeResource', () => {
           }
         );
       });
-
       it('invokes the callback with successful results', (done) => {
         const returnedCharge = {
           id: 'ch_123',
@@ -914,7 +802,6 @@ describe('StripeResource', () => {
           }
         );
       });
-
       it('returns successful results to await', (done) => {
         const returnedCharge = {
           id: 'ch_123',
@@ -941,7 +828,6 @@ describe('StripeResource', () => {
         );
       });
     });
-
     describe('_shouldRetry', () => {
       it("should return false if we've reached maximum retries", () => {
         const res = stripe.invoices._shouldRetry(
@@ -949,38 +835,30 @@ describe('StripeResource', () => {
           1,
           1
         );
-
         expect(res).to.equal(false);
       });
-
       it('should return true if we have more retries available', () => {
         const res = stripe.invoices._shouldRetry(
           new HttpClientResponse(409, {}),
           0,
           1
         );
-
         expect(res).to.equal(true);
       });
-
       it('should return true if the error code is either 409 or 503', () => {
         let res = stripe.invoices._shouldRetry(
           new HttpClientResponse(409, {}),
           0,
           1
         );
-
         expect(res).to.equal(true);
-
         res = stripe.invoices._shouldRetry(
           new HttpClientResponse(503, {}),
           0,
           1
         );
-
         expect(res).to.equal(true);
       });
-
       it('should return false if the status is 200', () => {
         // mocking that we're on our 2nd request
         const res = stripe.invoices._shouldRetry(
@@ -988,28 +866,22 @@ describe('StripeResource', () => {
           1,
           2
         );
-
         expect(res).to.equal(false);
       });
     });
-
     describe('_getSleepTimeInMS', () => {
       it('should not exceed the maximum or minimum values', () => {
         const max = stripe.getMaxNetworkRetryDelay();
         const min = stripe.getInitialNetworkRetryDelay();
-
         for (let i = 0; i < 10; i++) {
           const sleepSeconds = stripe.invoices._getSleepTimeInMS(i) / 1000;
-
           expect(sleepSeconds).to.be.at.most(max);
           expect(sleepSeconds).to.be.at.least(min);
         }
       });
-
       it('should allow a maximum override', () => {
         const maxSec = stripe.getMaxNetworkRetryDelay();
         const minMS = stripe.getInitialNetworkRetryDelay() * 1000;
-
         expect(stripe.invoices._getSleepTimeInMS(3, 0)).to.be.gt(minMS);
         expect(stripe.invoices._getSleepTimeInMS(2, 3)).to.equal(3000);
         expect(stripe.invoices._getSleepTimeInMS(0, 3)).to.equal(3000);
@@ -1020,34 +892,26 @@ describe('StripeResource', () => {
       });
     });
   });
-
   describe('Request Timeout', () => {
     it('should allow the setting of a request timeout on a per-request basis', (done) => {
       stripe.setTimeout(1000);
-
       stripe.charges.create({});
-
       expect(stripe.LAST_REQUEST.settings).to.deep.equal({});
-
       stripe.charges.create({}, {timeout: 10});
-
       expect(stripe.LAST_REQUEST.settings).to.deep.equal({
         timeout: 10,
       });
       done();
     });
   });
-
   describe('method with fullPath', () => {
     it('interpolates in parameters', (callback) => {
       const handleRequest = (req, res) => {
         expect(req.url).to.equal('/v1/parent/hello/child/world');
-
         // Write back JSON to close out the server.
         res.write('{}');
         res.end();
       };
-
       testUtils.getTestServerStripe(
         {},
         handleRequest,
@@ -1058,7 +922,6 @@ describe('StripeResource', () => {
               fullPath: '/v1/parent/{param1}/child/{param2}',
             }),
           }))(stripe);
-
           return resource.test('hello', 'world', (err, res) => {
             closeServer();
             // Spot check that we received a response.
@@ -1069,41 +932,33 @@ describe('StripeResource', () => {
       );
     });
   });
-
   describe('custom host on method', () => {
     const makeResource = (stripe) => {
       return new (StripeResource.extend({
         path: 'resourceWithHost',
-
         testMethod: stripeMethod({
           method: 'GET',
           host: 'some.host.stripe.com',
         }),
       }))(stripe);
     };
-
     it('is not impacted by the global host', (done) => {
-      const stripe = require('../lib/stripe')('sk_test', {
+      const stripe = stripe$0('sk_test', {
         host: 'bad.host.stripe.com',
       });
-
       const scope = nock('https://some.host.stripe.com')
         .get('/v1/resourceWithHost')
         .reply(200, '{}');
-
       makeResource(stripe).testMethod({}, (err, response) => {
         done(err);
         scope.done();
       });
     });
-
     it('still lets users override the host on a per-request basis', (done) => {
-      const stripe = require('../lib/stripe')('sk_test');
-
+      const stripe = stripe$0('sk_test');
       const scope = nock('https://some.other.host.stripe.com')
         .get('/v1/resourceWithHost')
         .reply(200, '{}');
-
       makeResource(stripe).testMethod(
         {},
         {host: 'some.other.host.stripe.com'},
@@ -1114,17 +969,14 @@ describe('StripeResource', () => {
       );
     });
   });
-
   describe('method with fullPath', () => {
     it('interpolates in parameters', (callback) => {
       const handleRequest = (req, res) => {
         expect(req.url).to.equal('/v1/parent/hello/child/world');
-
         // Write back JSON to close out the server.
         res.write('{}');
         res.end();
       };
-
       testUtils.getTestServerStripe(
         {},
         handleRequest,
@@ -1135,7 +987,6 @@ describe('StripeResource', () => {
               fullPath: '/v1/parent/{param1}/child/{param2}',
             }),
           }))(stripe);
-
           return resource.test('hello', 'world', (err, res) => {
             closeServer();
             // Spot check that we received a response.
@@ -1146,7 +997,6 @@ describe('StripeResource', () => {
       );
     });
   });
-
   describe('streaming', () => {
     /**
      * Defines a fake resource with a `pdf` method
@@ -1155,7 +1005,6 @@ describe('StripeResource', () => {
     const makeResourceWithPDFMethod = (stripe) => {
       return new (StripeResource.extend({
         path: 'resourceWithPDF',
-
         pdf: stripeMethod({
           method: 'GET',
           host: 'files.stripe.com',
@@ -1163,7 +1012,6 @@ describe('StripeResource', () => {
         }),
       }))(stripe);
     };
-
     it('success', (callback) => {
       const handleRequest = (req, res) => {
         setTimeout(() => res.write('pretend'), 10);
@@ -1171,7 +1019,6 @@ describe('StripeResource', () => {
         setTimeout(() => res.write(' is a pdf'), 30);
         setTimeout(() => res.end(), 40);
       };
-
       testUtils.getTestServerStripe(
         {},
         handleRequest,
@@ -1180,7 +1027,6 @@ describe('StripeResource', () => {
           if (err) {
             return callback(err);
           }
-
           return foos.pdf({id: 'foo_123'}, {host: 'localhost'}, (err, res) => {
             closeServer();
             if (err) {
@@ -1199,7 +1045,6 @@ describe('StripeResource', () => {
         }
       );
     });
-
     it('failure', (callback) => {
       const handleRequest = (req, res) => {
         setTimeout(() => res.writeHead(500));
@@ -1212,7 +1057,6 @@ describe('StripeResource', () => {
         );
         setTimeout(() => res.end(), 20);
       };
-
       testUtils.getTestServerStripe(
         {},
         handleRequest,
@@ -1220,9 +1064,7 @@ describe('StripeResource', () => {
           if (err) {
             return callback(err);
           }
-
           const foos = makeResourceWithPDFMethod(stripe);
-
           return foos.pdf({id: 'foo_123'}, {host: 'localhost'}, (err, res) => {
             closeServer();
             expect(err).to.exist;

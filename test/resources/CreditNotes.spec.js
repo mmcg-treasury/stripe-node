@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('CreditNotes Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('CreditNotes Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       const data = {
@@ -34,7 +33,6 @@ describe('CreditNotes Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.creditNotes.list({count: 25});
@@ -47,7 +45,6 @@ describe('CreditNotes Resource', () => {
       });
     });
   });
-
   describe('listLineItems', () => {
     it('Sends the correct request', () => {
       stripe.creditNotes.listLineItems('cn_123');
@@ -60,7 +57,6 @@ describe('CreditNotes Resource', () => {
       });
     });
   });
-
   describe('listPreviewLineItems', () => {
     it('Sends the correct request', () => {
       stripe.creditNotes.listPreviewLineItems();
@@ -73,7 +69,6 @@ describe('CreditNotes Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.creditNotes.update('cn_123', {application_fee: 200});
@@ -86,7 +81,6 @@ describe('CreditNotes Resource', () => {
       });
     });
   });
-
   describe('preview', () => {
     it('Sends the correct request', () => {
       const data = {
@@ -103,7 +97,6 @@ describe('CreditNotes Resource', () => {
       });
     });
   });
-
   describe('voidCreditNote', () => {
     it('Sends the correct request', () => {
       stripe.creditNotes.voidCreditNote('cn_123');

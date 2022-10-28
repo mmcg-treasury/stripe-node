@@ -1,9 +1,8 @@
-'use strict';
-
-const stripe = require('../../../testUtils').getSpyableStripe();
-
-const expect = require('chai').expect;
-
+import testUtils from '../../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Checkout', () => {
   describe('Sessions Resource', () => {
     describe('create', () => {
@@ -28,7 +27,6 @@ describe('Checkout', () => {
           success_url: 'https://stripe.com/success',
         };
         stripe.checkout.sessions.create(params);
-
         expect(stripe.LAST_REQUEST).to.deep.equal({
           method: 'POST',
           url: '/v1/checkout/sessions',
@@ -38,7 +36,6 @@ describe('Checkout', () => {
         });
       });
     });
-
     describe('retrieve', () => {
       it('Sends the correct request', () => {
         stripe.checkout.sessions.retrieve('cs_123');
@@ -51,7 +48,6 @@ describe('Checkout', () => {
         });
       });
     });
-
     describe('listLineItems', () => {
       it('Sends the correct request', () => {
         stripe.checkout.sessions.listLineItems('cs_123');

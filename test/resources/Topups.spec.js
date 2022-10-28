@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Topup Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('Topup Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.topups.create({
@@ -41,7 +40,6 @@ describe('Topup Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.topups.list();
@@ -54,7 +52,6 @@ describe('Topup Resource', () => {
       });
     });
   });
-
   describe('cancel', () => {
     it('Sends the correct request', () => {
       stripe.topups.cancel('tu_123');
@@ -67,7 +64,6 @@ describe('Topup Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.topups.update('tu_123', {metadata: {key: 'value'}});

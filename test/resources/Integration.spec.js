@@ -1,10 +1,9 @@
-'use strict';
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
 // Resource integration tests which use stripe-mock.
-
-const stripe = require('../../testUtils').getStripeMockClient();
-const expect = require('chai').expect;
-
+const stripe = testUtils.getStripeMockClient();
+const expect = {expect: expect$0}.expect;
 describe('Customers Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', async () => {
@@ -14,7 +13,6 @@ describe('Customers Resource', () => {
     });
   });
 });
-
 describe('Charges Resource', () => {
   describe('search', () => {
     it('Retrieves first page', async () => {
@@ -42,7 +40,6 @@ describe('Charges Resource', () => {
     });
   });
 });
-
 describe('Reader Resource', () => {
   describe('presentPaymentMethod', () => {
     it('Sends the correct request', async () => {

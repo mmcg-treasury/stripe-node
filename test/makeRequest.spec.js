@@ -1,11 +1,9 @@
-'use strict';
-
-require('../testUtils');
-
-const makeRequest = require('../lib/makeRequest');
-const utils = require('../lib/utils');
-const expect = require('chai').expect;
-
+import '../testUtils/index.js';
+import makeRequest from '../lib/makeRequest.js';
+import utils from '../lib/utils.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const expect = {expect: expect$0}.expect;
 describe('makeRequest', () => {
   describe('args', () => {
     it('does not mutate user-supplied deprecated opts', () => {
@@ -27,17 +25,14 @@ describe('makeRequest', () => {
       ]);
     });
   });
-
   describe('makeRequest with fullPath', () => {
     it('handles urlData', async () => {
       const args = ['hello', 'world'];
-
       const fullPath = '/v1/parent/{param1}/child/{param2}';
       const spec = {
         fullPath,
         urlParams: utils.extractUrlParams(fullPath),
       };
-
       let actualPath;
       const mockSelf = {
         // These two methods shouldn't be called when using a fullPath, as they

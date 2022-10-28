@@ -1,11 +1,10 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const testUtils = require('../../testUtils');
-const expect = require('chai').expect;
-
+import testUtils$0 from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils$0.getSpyableStripe();
+const testUtils = testUtils$0;
+const expect = {expect: expect$0}.expect;
 const QUOTE_TEST_ID = 'qt_123';
-
 describe('Quotes Resource', () => {
   describe('create', () => {
     it('Sends the correct request', () => {
@@ -23,7 +22,6 @@ describe('Quotes Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.quotes.list();
@@ -36,7 +34,6 @@ describe('Quotes Resource', () => {
       });
     });
   });
-
   describe('retrieve', () => {
     it('Sends the correct request', () => {
       stripe.quotes.retrieve(QUOTE_TEST_ID);
@@ -49,7 +46,6 @@ describe('Quotes Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.quotes.update(QUOTE_TEST_ID, {
@@ -64,7 +60,6 @@ describe('Quotes Resource', () => {
       });
     });
   });
-
   describe('accept', () => {
     it('Sends the correct request', () => {
       stripe.quotes.accept(QUOTE_TEST_ID);
@@ -77,7 +72,6 @@ describe('Quotes Resource', () => {
       });
     });
   });
-
   describe('cancel', () => {
     it('Sends the correct request', () => {
       stripe.quotes.cancel(QUOTE_TEST_ID);
@@ -90,7 +84,6 @@ describe('Quotes Resource', () => {
       });
     });
   });
-
   describe('finalize', () => {
     it('Sends the correct request', () => {
       stripe.quotes.finalizeQuote(QUOTE_TEST_ID);
@@ -103,7 +96,6 @@ describe('Quotes Resource', () => {
       });
     });
   });
-
   describe('listLineItems', () => {
     it('Sends the correct request', () => {
       stripe.quotes.listLineItems(QUOTE_TEST_ID);
@@ -116,7 +108,6 @@ describe('Quotes Resource', () => {
       });
     });
   });
-
   describe('listComputedUpfrontLineItems', () => {
     it('Sends the correct request', () => {
       stripe.quotes.listComputedUpfrontLineItems(QUOTE_TEST_ID);
@@ -129,14 +120,12 @@ describe('Quotes Resource', () => {
       });
     });
   });
-
   describe('pdf', () => {
     it('success', (callback) => {
       const handleRequest = (req, res) => {
         res.write('Stripe binary response');
         res.end();
       };
-
       testUtils.getTestServerStripe(
         {},
         handleRequest,
@@ -144,7 +133,6 @@ describe('Quotes Resource', () => {
           if (err) {
             return callback(err);
           }
-
           return stripe.quotes.pdf(
             'foo_123',
             {host: 'localhost'},
@@ -167,7 +155,6 @@ describe('Quotes Resource', () => {
         }
       );
     });
-
     it('failure', (callback) => {
       const handleRequest = (req, res) => {
         setTimeout(() => res.writeHead(500));
@@ -180,7 +167,6 @@ describe('Quotes Resource', () => {
         );
         setTimeout(() => res.end(), 20);
       };
-
       testUtils.getTestServerStripe(
         {},
         handleRequest,
@@ -188,7 +174,6 @@ describe('Quotes Resource', () => {
           if (err) {
             return callback(err);
           }
-
           return stripe.quotes.pdf(
             'foo_123',
             {host: 'localhost'},

@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('SKU Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -16,7 +16,6 @@ describe('SKU Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.skus.create({
@@ -41,7 +40,6 @@ describe('SKU Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.skus.list({
@@ -55,7 +53,6 @@ describe('SKU Resource', () => {
         settings: {},
       });
     });
-
     it('Supports filtering by product', () => {
       stripe.skus.list({
         product: 'prodId123',
@@ -69,7 +66,6 @@ describe('SKU Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.skus.update('skuIdFoo3242', {caption: 'test'});
@@ -82,7 +78,6 @@ describe('SKU Resource', () => {
       });
     });
   });
-
   describe('del', () => {
     it('Sends the correct request', () => {
       stripe.skus.del('skuIdFoo3242');

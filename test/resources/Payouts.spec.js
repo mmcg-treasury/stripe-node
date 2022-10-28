@@ -1,10 +1,9 @@
-'use strict';
-
-const stripe = require('../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 const PAYOUT_TEST_ID = 'po_testid1';
-
 describe('Payouts Resource', () => {
   describe('retrieve', () => {
     it('Sends the correct request', () => {
@@ -18,7 +17,6 @@ describe('Payouts Resource', () => {
       });
     });
   });
-
   describe('create', () => {
     it('Sends the correct request', () => {
       stripe.payouts.create({
@@ -34,7 +32,6 @@ describe('Payouts Resource', () => {
       });
     });
   });
-
   describe('update', () => {
     it('Sends the correct request', () => {
       stripe.payouts.update(PAYOUT_TEST_ID, {
@@ -49,7 +46,6 @@ describe('Payouts Resource', () => {
       });
     });
   });
-
   describe('cancel', () => {
     it('Sends the correct request', () => {
       stripe.payouts.cancel(PAYOUT_TEST_ID);
@@ -62,7 +58,6 @@ describe('Payouts Resource', () => {
       });
     });
   });
-
   describe('list', () => {
     it('Sends the correct request', () => {
       stripe.payouts.list();
@@ -75,7 +70,6 @@ describe('Payouts Resource', () => {
       });
     });
   });
-
   describe('reverse', () => {
     it('Sends the correct request', () => {
       stripe.payouts.reverse(PAYOUT_TEST_ID);

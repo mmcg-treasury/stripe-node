@@ -1,8 +1,8 @@
-'use strict';
-
-const stripe = require('../../../testUtils').getSpyableStripe();
-const expect = require('chai').expect;
-
+import testUtils from '../../../testUtils/index.js';
+import {expect as expect$0} from 'chai';
+('use strict');
+const stripe = testUtils.getSpyableStripe();
+const expect = {expect: expect$0}.expect;
 describe('Sigma', () => {
   describe('ScheduledQueryRun Resource', () => {
     describe('retrieve', () => {
@@ -17,7 +17,6 @@ describe('Sigma', () => {
         });
       });
     });
-
     describe('list', () => {
       it('Sends the correct request', () => {
         stripe.sigma.scheduledQueryRuns.list();
