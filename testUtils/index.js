@@ -3,7 +3,7 @@ import {use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import http from 'http';
 import CryptoProvider from '../lib/crypto/CryptoProvider.js';
-import {ResourceNamespace} from '../lib/ResourceNamespace.js';
+import {ResourceNamespace} from '../lib/ResourceNamespace.cjs';
 import stripe from '../lib/stripe.js';
 
 // Ensure we are using the 'as promised' libs before any tests are run:

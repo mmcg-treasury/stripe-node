@@ -1,5 +1,4 @@
-import * as stripeMethod from './StripeMethod.js';
-('use strict');
+import {stripeMethod} from './StripeMethod.js';
 export const create = stripeMethod({
   method: 'POST',
 });

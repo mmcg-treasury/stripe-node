@@ -1,12 +1,10 @@
-import {expect as expect$0} from 'chai';
+import {ArrayReadable, createHttpClientTestSuite} from './helpers.js';
+import {FetchHttpClient} from '../../lib/net/FetchHttpClient.js';
+import {Readable} from 'stream';
+import {expect} from 'chai';
 import fetch from 'node-fetch';
 import nock from 'nock';
-import stream from 'stream';
-import {FetchHttpClient} from '../../lib/net/FetchHttpClient.js';
-import {createHttpClientTestSuite, ArrayReadable} from './helpers.js';
-('use strict');
-const expect = {expect: expect$0}.expect;
-const {Readable} = stream;
+
 const createFetchHttpClient = () => {
   return new FetchHttpClient(fetch);
 };
