@@ -138,7 +138,9 @@ const createHttpClientTestSuite = (createHttpClientFn, extraTestsFn) => {
             await response.toJSON();
             fail();
           } catch (e) {
-            expect(e.message).to.contain('Unexpected end of JSON input');
+            expect(e.message).to.contain(
+              'Unterminated string in JSON at position'
+            );
           }
         });
       });
